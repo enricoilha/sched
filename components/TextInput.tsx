@@ -13,7 +13,7 @@ export const TextInput = ({ title, register, error }: InputProps) => {
 
       <input
         type="text"
-        className={`h-9 w-full bg-white rounded-md outline outline-[.5px] outline-gray-300 focus-within:outline-black focus-within:outline-[.5px] focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-300 px-2 duration-100 font-light text-gray-800 text-sm shadow-sm ${
+        className={`h-9 w-full bg-white rounded-md outline outline-[.5px] outline-gray-300 focus-within:outline-gray-500 focus-within:outline-[.5px] focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-300 px-2 duration-100 font-light text-gray-800 text-sm shadow-sm ${
           error ? "outline-red-500" : ""
         }`}
         {...register}

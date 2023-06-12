@@ -92,8 +92,10 @@ export const DayColumn = () => {
     WaitRefCalculate()
   }, [ScheduleRef?.current?.scrollHeight])
   return (
-    <div className="w-[26vw] h-full flex ">
-      <div ref={ScheduleRef} className="w-full h-[75vh] relative">
+    
+    <div className="w-[26vw] h-full flex">
+    <div ref={ScheduleRef} className="w-full h-[75vh] relative">
+
         {Array.from({ length: 48 }).map((_, index) => {
           return (
             <div key={index} className="w-full flex h-20 items-start relative">
@@ -138,5 +140,6 @@ export const DayColumn = () => {
         className="w-[1px] bg-neutral-200"
       />
     </div>
+
   )
 }

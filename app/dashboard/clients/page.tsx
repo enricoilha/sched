@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase"
 import { Clients, columns } from "./columns"
 import { DataTable } from "./date-table"
 
+export const fetchCache = 'only-no-store'
+
 async function getClients(): Promise<{ data: Clients[]; count: number }> {
   const { data, count }: any = await supabase
     .from("clients")
@@ -22,7 +24,7 @@ export default async function ClientsPage() {
         Visão geral de todos os clientes
       </p>
 
-      <main className="mt-10">
+      <main className="w-full h-[58vh] max-w-[1050px] mt-10">
         <DataTable columns={columns} data={data} count={count} />
       </main>
     </section>

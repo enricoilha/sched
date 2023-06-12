@@ -52,11 +52,11 @@ export const SideSection = ({ children }: SideSectionProps) => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{
-              ease: "easeInOut",
+              ease: "easeIn",
               type: "tween",
               duration: 0.2,
             }}
-            className="w-4/12 h-screen bg-white absolute shadow-md right-0 p-3 flex items-center"
+            className="w-4/12 max-w-[480px] h-screen bg-white absolute shadow-md right-0 p-3 flex items-center"
           >
             {children}
           </motion.div>

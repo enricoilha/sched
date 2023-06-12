@@ -13,9 +13,9 @@ export default function CalendarPage() {
 
   return (
     <>
-      <main className="flex h-[90vh] flex-col bg-neutral-50">
+      <main className="flex h-[90vh] flex-col bg-white">
         <ScheduleHeader />
-        <div className="p-3 h-[80vh] bg-neutral-50">
+        <div className="p-3 h-[80vh] bg-white">
           <ScheduleBackground />
         </div>
       </main>
