@@ -1,12 +1,15 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from "react"
-import { useAtom } from "jotai"
-import { CiCalendar } from "react-icons/ci"
-import { HiOutlinePlusSm } from "react-icons/hi"
-import { IoPersonOutline } from "react-icons/io5"
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useAtom } from "jotai";
+import { CiCalendar } from "react-icons/ci";
+import { HiOutlinePlusSm } from "react-icons/hi";
+import { IoPersonOutline } from "react-icons/io5";
 
-import { SidesectionAtom } from "../../atoms/sidesection"
+
+
+import { SidesectionAtom } from "../../atoms/sidesection";
+import { CreateAppointment } from "../CreateAppointment"
 import { CreateClient } from "../CreateClient"
 
 export const NewSection = () => {
@@ -20,6 +23,13 @@ export const NewSection = () => {
       {
         text: "Novo agendamento",
         icon: <CiCalendar size={25} />,
+        openFunction: () =>
+          setSidesection((content) => ({
+            ...content,
+            children: <CreateAppointment />,
+            isOpen: true,
+            buttonRef,
+          })),
       },
       {
         text: "Novo cliente",

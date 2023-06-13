@@ -1,33 +1,33 @@
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { motion } from "framer-motion"
 import { useAtom } from "jotai"
-import { ArrowRightCircle, ArrowRightIcon, ChevronsRight } from "lucide-react"
+import { ChevronsRight } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { FiLoader } from "react-icons/fi"
-import { IoCloseOutline } from "react-icons/io5"
 import { z } from "zod"
 
+import { Clients } from "@/types/clients"
 import { supabase } from "@/lib/supabase"
 
 import { SidesectionAtom } from "../../atoms/sidesection"
 import { DateInput } from "../DateInput"
 import { PhoneInput } from "../PhoneInput"
-import { RoundedButtons } from "../RoundedButtons"
 import { SexInput } from "../SexInput"
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"
+import { CpfForm } from "./cpfForm"
 
 const FormSchema = z.object({
+  cpf: z
+    .string({ required_error: "Campo obrigatório" })
+    .length(11, { message: "Insira um CPF válido" }),
   name: z
     .string({ required_error: "Campo obrigatório" })
     .min(3, { message: "Insira um nome válido" }),
   email: z
     .string({ required_error: "Campo obrigatório" })
     .email({ message: "Insira um email válido" }),
-  cpf: z
-    .string({ required_error: "Campo obrigatório" })
-    .length(11, { message: "Insira um CPF válido" }),
   phone: z.object({
     ddd: z.string().length(2, { message: "DDD deve conter 2 caracteres" }),
     phoneNumber: z
@@ -46,18 +46,17 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>
 
-interface CreateClientProps {
-  closeFunction?: any
-}
-
-export const CreateClient = ({ closeFunction }: CreateClientProps) => {
+export const CreateAppointment: React.FC = () => {
   const { toast } = useToast()
   const [submitting, setSubmitting] = useState<boolean>(false)
+  const [client, setClient] = useState<Clients>()
   const [, setSidesection] = useAtom(SidesectionAtom)
+  console.log(client)
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<FormType>({
     resolver: zodResolver(FormSchema),
   })
@@ -113,7 +112,7 @@ export const CreateClient = ({ closeFunction }: CreateClientProps) => {
   }
 
   return (
-    <motion.div className="w-full h-[95vh] overflow-y-auto items-center p-3">
+    <motion.div className="w-full h-[98vh] overflow-y-auto items-center p-3">
       <header className="w-full flex items-center justify-between">
         <button
           onClick={() =>
@@ -125,62 +124,15 @@ export const CreateClient = ({ closeFunction }: CreateClientProps) => {
         </button>
       </header>
 
-      <p className="text-3xl mt-10">Criar Cliente</p>
+      <p className="text-3xl mt-1 mb-4">Criar Agendamento</p>
+
+      <CpfForm setClient={setClient} />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-4 flex flex-col gap-1  w-full justify-center"
       >
-        <TextInput
-          title="Nome Completo"
-          register={{ ...register("name") }}
-          error={errors?.name}
-        />
-
-        <TextInput
-          title="Email"
-          register={{ ...register("email") }}
-          error={errors?.email}
-        />
-
-        <div className="flex items-center w-full gap-x-6">
-          <PhoneInput
-            title="Telefone com DDD"
-            registerPhoneDDD={{
-              ...register("phone.ddd", { maxLength: 2 }),
-            }}
-            registerPhoneNumber={{
-              ...register("phone.phoneNumber", { maxLength: 9 }),
-            }}
-            error={errors?.phone}
-          />
-
-          <DateInput
-            title="Data de nascimento"
-            registerDay={{
-              ...register("born_date.day"),
-            }}
-            registerMonth={{ ...register("born_date.month") }}
-            registerYear={{ ...register("born_date.year") }}
-            error={errors?.born_date}
-          />
-        </div>
-
-        <div className="w-full flex items-center gap-x-3">
-          <TextInput
-            title="Cpf"
-            register={{ ...register("cpf") }}
-            error={errors?.cpf}
-          />
-
-          <SexInput
-            title="Sexo"
-            register={{ ...register("sex") }}
-            error={errors?.sex}
-          />
-        </div>
-
-        <button
+        {/* <button
           className="bg-gray-800 hover:bg-black duration-100 rounded-md w-44 py-2 mx-auto mt-2 text-white flex items-center justify-center"
           type="submit"
           disabled={submitting && submitting}
@@ -190,7 +142,7 @@ export const CreateClient = ({ closeFunction }: CreateClientProps) => {
           ) : (
             "Criar"
           )}
-        </button>
+        </button> */}
       </form>
     </motion.div>
   )

@@ -27,6 +27,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
   const path = usePathname()
   const router = useRouter()
 
+
   return (
     <div className="w-[100vw] h-screen flex bg-white">
       <section id="left" className="w-[20vw] h-full border-r p-3 bg-neutral-100">
@@ -52,7 +53,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
             onClick={() => supabase.auth.signOut()}
             className={`w-full h-14 pl-4 mt-20 rounded-lg bg-red-100 border border-red-300 hover:bg-red-200 text-red-900 flex items-center gap-x-3 cursor-pointer duration-150`}
           >
-            <div className="w-10">
+            <div className="w-10"> 
               <CiLogout size={28} />
             </div>
             Sair
@@ -60,7 +61,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
         </div>
       </section>
 
-      <section className="h-screen " >
+      <section className="h-screen w-full" >
       {children}
       </section>
     </div>

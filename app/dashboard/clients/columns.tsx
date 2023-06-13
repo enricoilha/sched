@@ -1,17 +1,12 @@
-"use client"
+"use client";
 
 import { ColumnDef } from "@tanstack/react-table"
 
-export type Clients = {
-  id: string
-  created_at: string
-  name: string
-  email: string
-  phone: string
-  born_date: string
-  sex: string
-  cpf: string
-}
+import { Clients } from "@/types/clients"
+
+
+
+
 
 export const columns: ColumnDef<Clients>[] = [
   {

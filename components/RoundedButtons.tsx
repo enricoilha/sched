@@ -24,7 +24,7 @@ export const RoundedButtons = ({
         backgroundColor: hovering ? (color ? `${color}38` : "#fafafa") : "",
         color,
       }}
-      className={`w-16 h-16 rounded-full ${
+      className={`w-12 h-12 rounded-full ${
         color ? "" : "border"
       } flex items-center justify-center duration-150 relative `}
       onClick={onClick}

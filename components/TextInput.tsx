@@ -1,9 +1,10 @@
-import { FieldError } from "react-hook-form";
+import { InputHTMLAttributes } from "react"
+import { FieldError } from "react-hook-form"
 
-interface InputProps {
-  title: string;
-  register: any;
-  error?: FieldError;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  title: string
+  register?: any
+  error?: FieldError
 }
 
 export const TextInput = ({ title, register, error }: InputProps) => {
@@ -23,5 +24,5 @@ export const TextInput = ({ title, register, error }: InputProps) => {
         {error?.message}
       </p>
     </div>
-  );
-};
+  )
+}
