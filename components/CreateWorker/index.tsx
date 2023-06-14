@@ -1,43 +1,40 @@
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { motion } from "framer-motion"
+"use client"
+
+import React, { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
 import { useAtom } from "jotai"
-import { ChevronsRight } from "lucide-react"
-import { useForm } from "react-hook-form"
+import {  ChevronsRight } from "lucide-react"
+import { useForm, Controller } from "react-hook-form"
 import { FiLoader } from "react-icons/fi"
 import { z } from "zod"
 
-import { Clients } from "@/types/clients"
 import { supabase } from "@/lib/supabase"
 
 import { SidesectionAtom } from "../../atoms/sidesection"
-import { DateInput } from "../DateInput"
 import { PhoneInput } from "../PhoneInput"
 import { SexInput } from "../SexInput"
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"
-import { CpfForm } from "./cpfForm"
+
+import {  RoleSelect } from "./RoleSelect";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
-  cpf: z
-    .string({ required_error: "Campo obrigatório" })
-    .length(11, { message: "Insira um CPF válido" }),
   name: z
     .string({ required_error: "Campo obrigatório" })
     .min(3, { message: "Insira um nome válido" }),
-  email: z
+  role: z
     .string({ required_error: "Campo obrigatório" })
-    .email({ message: "Insira um email válido" }),
+    .min(3,{ message: "Campo obrigatório" }),
+  cpf: z
+    .string({ required_error: "Campo obrigatório" })
+    .length(11, { message: "Insira um CPF válido" }),
   phone: z.object({
     ddd: z.string().length(2, { message: "DDD deve conter 2 caracteres" }),
     phoneNumber: z
       .string()
       .length(9, { message: "Telefone deve conter 9 caracteres" }),
-  }),
-  born_date: z.object({
-    day: z.string().length(2, { message: "Insira um dia válido" }),
-    month: z.string().length(2, { message: "Insira um mês válido" }),
-    year: z.string().length(4, { message: "Insira um ano válido" }),
   }),
   sex: z
     .string({ required_error: "Campo obrigatório" })
@@ -46,24 +43,23 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>
 
-export const CreateAppointment: React.FC = () => {
+
+export const CreateWorker: React.FC = () => {
+  const router = useRouter()
   const { toast } = useToast()
   const [submitting, setSubmitting] = useState<boolean>(false)
-  const [client, setClient] = useState<Clients | undefined>()
   const [, setSidesection] = useAtom(SidesectionAtom)
-  console.log(client)
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<FormType>({
     resolver: zodResolver(FormSchema),
   })
 
   const onSubmit = async ({
-    born_date,
-    email,
+    role,
     name,
     phone,
     sex,
@@ -71,24 +67,25 @@ export const CreateAppointment: React.FC = () => {
   }: FormType) => {
     setSubmitting(true)
     const checkIfAlreadyExists: any = await supabase
-      .from("clients")
-      .select("cpf, email, name")
+      .from("professionals")
+      .select("name")
       .eq("cpf", cpf)
 
     if (checkIfAlreadyExists.data[0] !== undefined) {
       setSubmitting(false)
       return toast({
         title: "Erro no cadastro",
-        description: "Já existe um cliente cadastrado com esse CPF",
+        description: "Já existe um profissional cadastrado com esse CPF",
         variant: "destructive",
       })
     }
 
-    const insertToDb = await supabase.from("clients").insert({
-      born_date,
-      email,
+    const phoneAndDDD = phone.ddd + phone.phoneNumber
+
+    const insertToDb = await supabase.from("professionals").insert({
       name,
-      phone: `${phone.ddd}${phone.phoneNumber}`,
+      role,
+      phone: phoneAndDDD,
       sex,
       cpf,
     })
@@ -104,15 +101,16 @@ export const CreateAppointment: React.FC = () => {
     setSubmitting(false)
     toast({
       title: "Sucesso",
-      description: "Cliente cadastrado com sucesso",
+      description: "Profissional cadastrado com sucesso",
     })
     3
-
-    return setSidesection((content) => ({ ...content, isOpen: false }))
+    await fetch('/api/revalidate')
+    setSidesection((content) => ({ ...content, isOpen: false }))
+    return router.refresh()
   }
 
   return (
-    <motion.div className="w-full h-[98vh] overflow-y-auto items-center p-3">
+    <motion.div className="w-full h-[95vh] overflow-y-auto items-center p-3">
       <header className="w-full flex items-center justify-between">
         <button
           onClick={() =>
@@ -124,14 +122,60 @@ export const CreateAppointment: React.FC = () => {
         </button>
       </header>
 
-      <p className="text-3xl mt-1 mb-4">Criar Agendamento</p>
 
-      {client ? (
-       <motion.div initial={{translateY: '50%', opacity: .5}} animate={{translateY: '0%', opacity: 1}} >
-         <form
+      <p className="text-3xl mt-10">Novo profissional</p>
+
+      <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex flex-col gap-1  w-full justify-center"
+        className="mt-4 flex flex-col gap-2  w-full justify-center"
       >
+        <TextInput
+          title="Nome Completo"
+          register={{ ...register("name") }}
+          error={errors?.name}
+        />
+
+        <Controller
+          control={control}
+          name="role"
+          render={({ field }) => (
+            <RoleSelect 
+              error={errors.role} 
+              value={field.value} 
+              onBlur={field.onBlur} 
+              onChange={field.onChange} 
+              title="Ocupação"   
+            />
+          )}
+          />
+
+        <div className="w-full flex items-center gap-x-3">
+          <TextInput
+            title="CPF"
+            register={{ ...register("cpf") }}
+            error={errors?.cpf}
+          />
+        </div>
+
+        <div className="flex items-center w-full gap-x-6">
+          <PhoneInput
+            title="Telefone com DDD"
+            registerPhoneDDD={{
+              ...register("phone.ddd", { maxLength: 2 }),
+            }}
+            registerPhoneNumber={{
+              ...register("phone.phoneNumber", { maxLength: 9 }),
+            }}
+            error={errors?.phone}
+          />
+
+        <SexInput
+            title="Sexo"
+            register={{ ...register("sex") }}
+            error={errors?.sex}
+          />
+        </div>
+
         <button
           className="bg-gray-800 hover:bg-black duration-100 rounded-md w-44 py-2 mx-auto mt-2 text-white flex items-center justify-center"
           type="submit"
@@ -144,12 +188,6 @@ export const CreateAppointment: React.FC = () => {
           )}
         </button>
       </form>
-        </motion.div>
-      ) : (
-      <CpfForm setClient={setClient} />
-
-      )}
-      
     </motion.div>
   )
 }

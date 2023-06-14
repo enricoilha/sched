@@ -1,7 +1,5 @@
-import InputMask from "react-input-mask";
-import { FieldError, FieldErrorsImpl } from "react-hook-form";
+import { FieldError } from "react-hook-form";
 
-type PhoneProps = { ddd: FieldError; phoneNumber: FieldError };
 
 type InputProps = {
   title: string;
@@ -38,7 +36,7 @@ export const PhoneInput = ({
         />
       </div>
 
-      <p className="text-red-500 font-light absolute -bottom-1">
+      <p className="text-red-500 font-light absolute -bottom-1 w-full text-[0.8rem]">
         {error?.ddd?.message || error?.phoneNumber?.message
           ? error?.ddd?.message || error?.phoneNumber?.message
           : null}

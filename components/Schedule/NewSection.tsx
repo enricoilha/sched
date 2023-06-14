@@ -66,9 +66,9 @@ export const NewSection = () => {
       <div
         ref={buttonRef}
         onClick={() => setIsOpen(true)}
-        className="h-10 rounded-md bg-emerald-500 shadow hover:bg-emerald-600 duration-150 cursor-pointer flex items-center gap-x-2 px-5 text-white relative"
+        className="py-[.3rem] rounded bg-emerald-500 hover:bg-green-600 duration-150 cursor-pointer flex items-center gap-x-2 px-5 text-white relative"
       >
-        <HiOutlinePlusSm size={30} />
+        <HiOutlinePlusSm size={24} />
         <p>Novo</p>
 
         {isOpen && (

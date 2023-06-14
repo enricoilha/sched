@@ -6,8 +6,6 @@ import { Clients } from "@/types/clients"
 
 
 
-
-
 export const columns: ColumnDef<Clients>[] = [
   {
     accessorKey: "name",

@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase"
 
-import { Clients, columns } from "./columns"
+import { Clients } from "@/types/clients"
+import { columns } from "./columns"
 import { DataTable } from "./date-table"
 
 export const fetchCache = 'only-no-store'

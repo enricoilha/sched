@@ -1,3 +1,5 @@
+"use client"
+
 import { ReactNode, useEffect, useRef } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { useAtom } from "jotai"
