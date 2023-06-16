@@ -16,6 +16,7 @@ import { PhoneInput } from "../PhoneInput"
 import { SexInput } from "../SexInput"
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"
+import { ClientInfos } from "./ClientInfos"
 import { CpfForm } from "./cpfForm"
 
 const FormSchema = z.object({
@@ -127,29 +128,36 @@ export const CreateAppointment: React.FC = () => {
       <p className="text-3xl mt-1 mb-4">Criar Agendamento</p>
 
       {client ? (
-       <motion.div initial={{translateY: '50%', opacity: .5}} animate={{translateY: '0%', opacity: 1}} >
-         <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex flex-col gap-1  w-full justify-center"
-      >
-        <button
-          className="bg-gray-800 hover:bg-black duration-100 rounded-md w-44 py-2 mx-auto mt-2 text-white flex items-center justify-center"
-          type="submit"
-          disabled={submitting && submitting}
+        <motion.div
+          initial={{ translateY: "50%", opacity: 0.5 }}
+          animate={{ translateY: "0%", opacity: 1 }}
         >
-          {submitting ? (
-            <FiLoader size={24} className="animate-spin" color="#fafafab1" />
-          ) : (
-            "Criar"
-          )}
-        </button>
-      </form>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-4 flex flex-col gap-1  w-full justify-center"
+          >
+            <ClientInfos name={client.name} />
+
+            <button
+              className="font-medium hover:bg-neutral-100 px-5 py-1 rounded duration-100 w-fit mx-auto text-base"
+              type="submit"
+              disabled={submitting && submitting}
+            >
+              {submitting ? (
+                <FiLoader
+                  size={24}
+                  className="animate-spin"
+                  color="#fafafab1"
+                />
+              ) : (
+                "Criar"
+              )}
+            </button>
+          </form>
         </motion.div>
       ) : (
-      <CpfForm setClient={setClient} />
-
+        <CpfForm setClient={setClient} />
       )}
-      
     </motion.div>
   )
 }
