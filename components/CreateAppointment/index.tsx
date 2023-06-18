@@ -1,23 +1,22 @@
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { motion } from "framer-motion"
-import { useAtom } from "jotai"
-import { ChevronsRight } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { FiLoader } from "react-icons/fi"
-import { z } from "zod"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { ChevronsRight } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { FiLoader } from "react-icons/fi";
+import { z } from "zod";
 
-import { Clients } from "@/types/clients"
+
+
+import { Clients } from "@/types/clients";
 import { supabase } from "@/lib/supabase"
 
 import { SidesectionAtom } from "../../atoms/sidesection"
-import { DateInput } from "../DateInput"
-import { PhoneInput } from "../PhoneInput"
-import { SexInput } from "../SexInput"
-import { TextInput } from "../TextInput"
-import { useToast } from "../ui/use-toast"
-import { ClientInfos } from "./ClientInfos"
-import { CpfForm } from "./cpfForm"
+import { useToast } from "../ui/use-toast";
+import { ClientInfos } from "./ClientInfos";
+import { CpfForm } from "./cpfForm";
+
 
 const FormSchema = z.object({
   cpf: z
