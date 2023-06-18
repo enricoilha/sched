@@ -33,6 +33,12 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
   const path = usePathname()
   const router = useRouter()
 
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+
+    router.refresh()
+  }
+
   return (
     <div className="w-[100vw] h-screen flex bg-white">
       <section
@@ -62,7 +68,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
           ))}
         </div>
         <div
-          onClick={() => supabase.auth.signOut()}
+          onClick={handleSignOut}
           className={`w-full h-14 pl-4 mt-auto rounded-lg font-medium text-gray-600 hover:text-neutral-800 flex items-center gap-x-1 cursor-pointer duration-150`}
         >
           <div className="w-10">

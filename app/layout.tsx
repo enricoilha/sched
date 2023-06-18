@@ -7,6 +7,10 @@ import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: {
@@ -29,7 +33,10 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+
+
+
   return (
     <>
       <html lang="en" suppressHydrationWarning>

@@ -1,6 +1,5 @@
 "use client"
 
-import { sign } from "crypto"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import albus from "@/public/albus.webp"
@@ -9,9 +8,11 @@ import { motion } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { supabase } from "@/lib/supabase"
 import { useToast } from "@/components/ui/use-toast"
 import { TextInput } from "@/components/TextInput"
+import { cookies } from "next/headers"
+import { revalidatePath } from "next/cache"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 const FormSchema = z.object({
   name: z
@@ -28,6 +29,7 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>
 
 export default function LoginPage() {
+  const supabase = createClientComponentClient()
   const { toast } = useToast()
   const router = useRouter()
   const {
@@ -37,8 +39,9 @@ export default function LoginPage() {
   } = useForm<FormType>({
     resolver: zodResolver(FormSchema),
   })
-
+  
   async function onSubmit(fields: FormType) {
+
     const signup = await supabase.auth.signUp({
       email: fields.email,
       password: fields.password,
@@ -54,6 +57,7 @@ export default function LoginPage() {
       })
     }
 
+    revalidatePath('/')
     router.refresh()
   }
 

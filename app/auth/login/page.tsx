@@ -1,16 +1,18 @@
 "use client"
-
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import albus from "@/public/albus.webp"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import {  createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { motion } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useToast } from "@/components/ui/use-toast"
 import { TextInput } from "@/components/TextInput"
+import { revalidatePath } from "next/cache"
+import { useState } from "react"
+import { Loader } from "lucide-react"
 
 const FormSchema = z.object({
   email: z
@@ -27,6 +29,7 @@ export default function LoginPage() {
   const supabase = createClientComponentClient()
   const { toast } = useToast()
   const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false)
   const {
     register,
     handleSubmit,
@@ -36,17 +39,27 @@ export default function LoginPage() {
   })
 
   async function onSubmit(fields: FormType) {
+    setLoading(true)
     const user = await supabase.auth.signInWithPassword({
       email: fields.email,
       password: fields.password,
     })
 
     if (user.error) {
-      console.log(user.error)
-      return toast({
+      
+      return user.error.status === 400 ? 
+       toast({
         title: "Não foi possível realizar o login",
+        description: "Credenciais inválidas",
+        variant: 'destructive'
+      }) :  toast({
+        title: "Não foi possível realizar o login",
+        variant: 'destructive'
       })
     }
+
+    setLoading(false)
+    router.push("/dashboard/calendar")
   }
 
   return (
@@ -79,8 +92,8 @@ export default function LoginPage() {
           error={errors.password}
         />
 
-        <button className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 ">
-          Entrar
+        <button className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center">
+         {loading ? <Loader size={22} className="animate-spin" /> : 'Entrar'}
         </button>
       </form>
       <div className="mt-2 text-sm flex gap-x-2 items-center justify-center">

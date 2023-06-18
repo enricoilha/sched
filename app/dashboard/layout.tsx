@@ -1,14 +1,21 @@
-"use client"
+import { ReactNode } from "react"
 
-import { ReactNode, useEffect } from "react"
-import { WorkspaceAtom } from "@/atoms/workspace"
-import { useAtom } from "jotai"
-
-import { supabase } from "@/lib/supabase"
 import { Sidebar } from "@/components/Sidebar"
+import {  createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
-export default function Layout({ children }: { children: ReactNode }) {
-  const [workspace] = useAtom(WorkspaceAtom)
+export default async function Layout({ children }: { children: ReactNode }) {
+  const supabase = createServerComponentClient({cookies})
+
+
+  const { data } = await supabase.auth.getSession()
+
+  if (!data.session) {
+    redirect('/auth/login')
+  }
+
+
   async function fetchWorkspace() {
     const { data, error } = await supabase
       .from("workspaces")
@@ -24,9 +31,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     console.log(data || error)
   }
 
-  useEffect(() => {
-    fetchWorkspace()
-  }, [])
+
 
   return (
     <>
