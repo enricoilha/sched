@@ -2,10 +2,9 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai"
-import { ArrowRightCircle, ArrowRightIcon, ChevronsRight } from "lucide-react"
+import {  ChevronsRight } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { FiLoader } from "react-icons/fi"
-import { IoCloseOutline } from "react-icons/io5"
 import { z } from "zod"
 
 import { supabase } from "@/lib/supabase"
@@ -13,7 +12,6 @@ import { supabase } from "@/lib/supabase"
 import { SidesectionAtom } from "../../atoms/sidesection"
 import { DateInput } from "../DateInput"
 import { PhoneInput } from "../PhoneInput"
-import { RoundedButtons } from "../RoundedButtons"
 import { SexInput } from "../SexInput"
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"

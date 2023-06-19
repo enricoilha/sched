@@ -10,9 +10,9 @@ import { z } from "zod"
 
 import { useToast } from "@/components/ui/use-toast"
 import { TextInput } from "@/components/TextInput"
-import { cookies } from "next/headers"
-import { revalidatePath } from "next/cache"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { useState } from "react"
+import { Loader } from "lucide-react"
 
 const FormSchema = z.object({
   name: z
@@ -30,6 +30,7 @@ type FormType = z.infer<typeof FormSchema>
 
 export default function LoginPage() {
   const supabase = createClientComponentClient()
+  const [loading, setLoading ] = useState<boolean>(false)
   const { toast } = useToast()
   const router = useRouter()
   const {
@@ -41,7 +42,7 @@ export default function LoginPage() {
   })
   
   async function onSubmit(fields: FormType) {
-
+    setLoading(true)
     const signup = await supabase.auth.signUp({
       email: fields.email,
       password: fields.password,
@@ -51,14 +52,14 @@ export default function LoginPage() {
     })
 
     if (signup.error) {
-      console.log(signup.error)
+      setLoading(false)
       return toast({
         title: "Não foi possível realizar o cadastro",
       })
     }
 
-    revalidatePath('/')
-    router.refresh()
+    setLoading(false)
+        router.push(`/auth/confirm?email=${fields.email}` )
   }
 
   return (
@@ -93,20 +94,18 @@ export default function LoginPage() {
           title="Senha"
           type="password"
           register={{ ...register("password") }}
-          error={errors.password}
+          error={errors.password  }
         />
 
-        <button
-          type="submit"
-          className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 "
-        >
-          Entrar
+        <button disabled={loading && loading} className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center">
+         {loading ? <Loader size={22} className="animate-spin" /> : 'Entrar'}
         </button>
       </form>
       <div className="mt-2 text-sm flex gap-x-2 items-center justify-center">
         <p>Já possui conta?</p>
         <button
           type="button"
+          disabled={loading && loading}
           onClick={() => router.push("/auth/login")}
           className="text-emerald-600 font-medium hover:underline duration-100 underline-offset-2"
         >

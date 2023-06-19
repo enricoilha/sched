@@ -4,12 +4,14 @@ import { SetStateAction } from "jotai"
 import { useForm } from "react-hook-form"
 import { FiLoader } from "react-icons/fi"
 import { z } from "zod"
+import { motion } from "framer-motion"
 
 import { Clients } from "@/types/clients"
 import { supabase } from "@/lib/supabase"
 
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"
+import { NewClientButton } from "./newClientButton"
 
 const formSchema = z.object({
   cpf: z
@@ -26,6 +28,7 @@ interface CpfFormProps {
 export const CpfForm: React.FC<CpfFormProps> = ({ setClient }) => {
   const { toast } = useToast()
   const [checking, setChecking] = useState<boolean>(false)
+  const [ createNewCLient, setCreateNewClient ] = useState<boolean>(false)
   const {
     handleSubmit,
     register,
@@ -43,6 +46,7 @@ export const CpfForm: React.FC<CpfFormProps> = ({ setClient }) => {
 
     if (client.data[0] === undefined) {
       setChecking(false)
+      setCreateNewClient(true)
       return toast({
         title: "Cliente não encontrado",
         description: "Cliente não encontrado, crie um novo registro do cliente",
@@ -64,6 +68,9 @@ export const CpfForm: React.FC<CpfFormProps> = ({ setClient }) => {
         title="Pequisar CPF"
         error={errors.cpf}
       />
+
+      {createNewCLient && <NewClientButton />}
+  
 
       <button
         type="submit"

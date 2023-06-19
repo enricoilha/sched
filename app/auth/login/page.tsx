@@ -10,7 +10,6 @@ import { z } from "zod"
 
 import { useToast } from "@/components/ui/use-toast"
 import { TextInput } from "@/components/TextInput"
-import { revalidatePath } from "next/cache"
 import { useState } from "react"
 import { Loader } from "lucide-react"
 
@@ -46,7 +45,6 @@ export default function LoginPage() {
     })
 
     if (user.error) {
-      
       return user.error.status === 400 ? 
        toast({
         title: "Não foi possível realizar o login",
@@ -57,6 +55,8 @@ export default function LoginPage() {
         variant: 'destructive'
       })
     }
+
+    setLoading(false)
     router.push("/dashboard/calendar")
   }
 
@@ -90,7 +90,7 @@ export default function LoginPage() {
           error={errors.password}
         />
 
-        <button className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center">
+        <button disabled={loading && loading} className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center">
          {loading ? <Loader size={22} className="animate-spin" /> : 'Entrar'}
         </button>
       </form>
@@ -98,6 +98,7 @@ export default function LoginPage() {
         <p>Não possui conta?</p>
         <button
           onClick={() => router.push("/auth/signup")}
+          disabled={loading && loading}
           type="button"
           className="text-emerald-600 font-medium hover:underline duration-100 underline-offset-2"
         >
