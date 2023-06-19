@@ -57,8 +57,6 @@ export default function LoginPage() {
         variant: 'destructive'
       })
     }
-
-    setLoading(false)
     router.push("/dashboard/calendar")
   }
 

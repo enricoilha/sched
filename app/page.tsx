@@ -1,13 +1,16 @@
-"use client"
 
-import { SidesectionAtom } from "@/atoms/sidesection"
-import { AnimatePresence } from "framer-motion"
-import { useAtom } from "jotai"
+import {createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
-import { ScheduleBackground } from "@/components/Schedule/ScheduleBackground"
-import { ScheduleHeader } from "@/components/Schedule/ScheduleHeader"
-import { SideSection } from "@/components/SideSection"
 
-export default function IndexPage() {
-  return <div>hello index</div>
+export default async function IndexPage() {
+  const supabase = createServerComponentClient({ cookies})
+  
+  const user = await supabase.auth.getSession()
+
+  if(!user.data) {
+    redirect("/auth/login")
+  }
+  return redirect("/dashboard/calendar")
 }
