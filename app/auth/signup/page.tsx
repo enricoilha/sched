@@ -58,6 +58,12 @@ export default function LoginPage() {
       })
     }
 
+    const addUserTable = await supabase.from("users").insert({
+    name: fields.name,
+    email: fields.email,
+    user_id: signup.data.user?.id  
+    })
+
     setLoading(false)
         router.push(`/auth/confirm?email=${fields.email}` )
   }

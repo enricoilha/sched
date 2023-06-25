@@ -12,5 +12,5 @@ export default async function IndexPage() {
   if(!user.data) {
     redirect("/auth/login")
   }
-  return redirect("/dashboard/calendar")
+  return redirect("/workspaces")
 }

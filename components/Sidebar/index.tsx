@@ -49,9 +49,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
           <Image className="max-w-[160px]" src={albusPhoto} alt="" />
         </div>
 
-        <div className="relative">
-          <WorkspaceComponent data={[]} />
-        </div>
+    
 
         <div className="w-full flex flex-col gap-3 p-3">
           {ButtonsArray.map((item, index) => (

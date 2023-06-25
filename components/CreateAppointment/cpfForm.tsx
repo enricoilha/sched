@@ -71,7 +71,6 @@ export const CpfForm: React.FC<CpfFormProps> = ({ setClient }) => {
 
       {createNewCLient && <NewClientButton />}
   
-
       <button
         type="submit"
         disabled={checking && checking}

@@ -45,6 +45,7 @@ export default function LoginPage() {
     })
 
     if (user.error) {
+      setLoading(false)
       return user.error.status === 400 ? 
        toast({
         title: "Não foi possível realizar o login",
@@ -57,7 +58,7 @@ export default function LoginPage() {
     }
 
     setLoading(false)
-    router.push("/dashboard/calendar")
+    router.push("/")
   }
 
   return (
