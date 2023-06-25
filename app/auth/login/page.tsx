@@ -39,6 +39,7 @@ export default function LoginPage() {
 
   async function onSubmit(fields: FormType) {
     setLoading(true)
+
     const user = await supabase.auth.signInWithPassword({
       email: fields.email,
       password: fields.password,
@@ -91,7 +92,10 @@ export default function LoginPage() {
           error={errors.password}
         />
 
-        <button disabled={loading && loading} className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center">
+        <button 
+        disabled={loading && loading} 
+        className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center"
+        >
          {loading ? <Loader size={22} className="animate-spin" /> : 'Entrar'}
         </button>
       </form>
