@@ -1,8 +1,8 @@
-import { ReactNode } from "react"
-import Image from "next/image"
+import { ReactNode } from "react";
+import Image from "next/image";
 import authbg from "@/public/authbg.svg"
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <section className="w-screen h-screen relative flex items-center justify-center">
       <Image

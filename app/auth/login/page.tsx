@@ -1,18 +1,18 @@
 "use client"
-import Image from "next/image"
-import {  useRouter } from "next/navigation"
 
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
 import albus from "@/public/albus.webp"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {  createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { motion } from "framer-motion"
+import { Loader } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { useToast } from "@/components/ui/use-toast"
 import { TextInput } from "@/components/TextInput"
-import { useEffect, useState } from "react"
-import { Loader } from "lucide-react"
 
 const FormSchema = z.object({
   email: z
@@ -30,7 +30,7 @@ export default function LoginPage() {
   const { toast } = useToast()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
-  
+
   const {
     register,
     handleSubmit,
@@ -38,18 +38,6 @@ export default function LoginPage() {
   } = useForm<FormType>({
     resolver: zodResolver(FormSchema),
   })
-
-
-  async function checkSession () {
-    const session = await supabase.auth.getSession()
-
-    if(!session.data.session) {
-      return
-    }
-
-    router.push('/workspaces')
-  }
-
 
   async function onSubmit(fields: FormType) {
     setLoading(true)
@@ -61,30 +49,27 @@ export default function LoginPage() {
 
     if (user.error) {
       setLoading(false)
-      return user.error.status === 400 ? 
-       toast({
-        title: "Não foi possível realizar o login",
-        description: "Credenciais inválidas",
-        variant: 'destructive'
-      }) :  toast({
-        title: "Não foi possível realizar o login",
-        variant: 'destructive'
-      })
+      return user.error.status === 400
+        ? toast({
+            title: "Não foi possível realizar o login",
+            description: "Credenciais inválidas",
+            variant: "destructive",
+          })
+        : toast({
+            title: "Não foi possível realizar o login",
+            variant: "destructive",
+          })
     }
 
     setLoading(false)
-    router.push("/")
+    router.push("/workspaces")
   }
-
-  useEffect(() => {
-    checkSession()
-  },)
 
   return (
     <motion.div
       initial={{ translateX: "-50%", opacity: 0 }}
       animate={{ translateX: "0%", opacity: 1 }}
-      className="w-[26rem] min-h-[28rem] bg-white shadow p-8 rounded-2xl flex flex-col"
+      className="w-[26rem] min-h-[28rem] bg-white shadow p-8 rounded-md flex flex-col"
     >
       <Image src={albus} alt="Albus logo" width={80} />
 
@@ -110,11 +95,11 @@ export default function LoginPage() {
           error={errors.password}
         />
 
-        <button 
-        disabled={loading && loading} 
-        className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center"
+        <button
+          disabled={loading && loading}
+          className="w-full h-9 bg-emerald-500 text-white font-medium rounded duration-100 hover:bg-emerald-600 flex justify-center items-center"
         >
-         {loading ? <Loader size={22} className="animate-spin" /> : 'Entrar'}
+          {loading ? <Loader size={22} className="animate-spin" /> : "Entrar"}
         </button>
       </form>
       <div className="mt-2 text-sm flex gap-x-2 items-center justify-center">

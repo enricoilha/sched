@@ -3,34 +3,38 @@
 import { ReactNode } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import albusPhoto from "@/public/albus.webp"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { AtSign, Calendar, Users } from "lucide-react"
+import { WorkspaceAtom } from "@/atoms/workspace";
+import albusPhoto from "@/public/albus.webp";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useAtom } from "jotai";
+import { AtSign, Calendar, Users } from "lucide-react";
 import { CiLogout } from "react-icons/ci"
-import { WorkspaceComponent } from "./Workspace";
 
-const ButtonsArray = [
-  {
-    text: "Calendário",
-    route: "/dashboard/calendar",
-    icon: <Calendar size={24} />,
-  },
-  {
-    text: "Clientes",
-    route: "/dashboard/clients",
-    icon: <Users size={24} />,
-  },
-  {
-    text: "Profissionais",
-    route: "/dashboard/professionals",
-    icon: <AtSign size={24} />,
-  },
-]
+import { WorkspaceComponent } from "./Workspace"
 
 export const Sidebar = ({ children }: { children: ReactNode }) => {
+  const [workspace] = useAtom(WorkspaceAtom)
   const supabase = createClientComponentClient()
   const path = usePathname()
   const router = useRouter()
+
+  const ButtonsArray = [
+    {
+      text: "Calendário",
+      route: `/${workspace?.workspace_id}/dashboard/calendar`,
+      icon: <Calendar size={24} />,
+    },
+    {
+      text: "Clientes",
+      route: `/${workspace?.workspace_id}/dashboard/clients`,
+      icon: <Users size={24} />,
+    },
+    {
+      text: "Profissionais",
+      route: `/${workspace?.workspace_id}/dashboard/professionals`,
+      icon: <AtSign size={24} />,
+    },
+  ]
 
   async function handleSignOut() {
     await supabase.auth.signOut()
@@ -48,9 +52,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
           <Image className="max-w-[160px]" src={albusPhoto} alt="" />
         </div>
 
-
-      <WorkspaceComponent />
-    
+        <WorkspaceComponent />
 
         <div className="w-full flex flex-col mt-4 gap-3 p-3">
           {ButtonsArray.map((item, index) => (

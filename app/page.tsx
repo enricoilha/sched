@@ -7,9 +7,9 @@ export default async function IndexPage() {
 
   const user = await supabase.auth.getSession()
 
-  if (!user.data) {
+  if (!user.data.session) {
     redirect("/auth/login")
   }
 
-  return redirect("/workspaces")
+  return  redirect("/workspaces")
 }
