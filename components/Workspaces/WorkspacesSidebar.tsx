@@ -21,7 +21,7 @@ export const WorkspacesSidebar: React.FC<any> = ({
   }
 
   return (
-    <div>
+    <div className="w-[100vw] h-screen flex bg-white">
       <section
         id="left"
         className="w-[14vw] h-screen flex flex-col border-r p-3 bg-neutral-100"
@@ -41,7 +41,7 @@ export const WorkspacesSidebar: React.FC<any> = ({
         </div>
       </section>
 
-      <section className="h-screen w-full">{children}</section>
+      <section className="h-screen w-full p-10">{children}</section>
     </div>
   )
 }

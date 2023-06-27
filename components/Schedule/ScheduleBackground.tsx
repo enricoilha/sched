@@ -7,7 +7,6 @@ import { BoardHeader } from "./BoardHeader";
 export const ScheduleBackground = () => {
   const [date] = useAtom(DateAtom);
 
-
   return (
     <>
       <section className="w-[80vw] h-[70vh] bg-white">

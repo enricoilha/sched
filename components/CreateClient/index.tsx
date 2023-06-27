@@ -15,6 +15,7 @@ import { PhoneInput } from "../PhoneInput"
 import { SexInput } from "../SexInput"
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"
+import { WorkspaceAtom } from "@/atoms/workspace";
 
 const FormSchema = z.object({
   name: z
@@ -52,6 +53,7 @@ export const CreateClient = ({ closeFunction }: CreateClientProps) => {
   const { toast } = useToast()
   const [submitting, setSubmitting] = useState<boolean>(false)
   const [, setSidesection] = useAtom(SidesectionAtom)
+  const [ workspace, setWorkspace] = useAtom(WorkspaceAtom)
   const {
     register,
     handleSubmit,
@@ -90,6 +92,7 @@ export const CreateClient = ({ closeFunction }: CreateClientProps) => {
       phone: `${phone.ddd}${phone.phoneNumber}`,
       sex,
       cpf,
+      workspace_id: workspace?.workspace_id
     })
 
     if (insertToDb.error) {

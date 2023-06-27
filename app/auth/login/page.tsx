@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import {  useRouter } from "next/navigation"
+
 import albus from "@/public/albus.webp"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {  createClientComponentClient } from "@supabase/auth-helpers-nextjs"
@@ -10,7 +11,7 @@ import { z } from "zod"
 
 import { useToast } from "@/components/ui/use-toast"
 import { TextInput } from "@/components/TextInput"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Loader } from "lucide-react"
 
 const FormSchema = z.object({
@@ -29,6 +30,7 @@ export default function LoginPage() {
   const { toast } = useToast()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
+  
   const {
     register,
     handleSubmit,
@@ -36,6 +38,18 @@ export default function LoginPage() {
   } = useForm<FormType>({
     resolver: zodResolver(FormSchema),
   })
+
+
+  async function checkSession () {
+    const session = await supabase.auth.getSession()
+
+    if(!session.data.session) {
+      return
+    }
+
+    router.push('/workspaces')
+  }
+
 
   async function onSubmit(fields: FormType) {
     setLoading(true)
@@ -61,6 +75,10 @@ export default function LoginPage() {
     setLoading(false)
     router.push("/")
   }
+
+  useEffect(() => {
+    checkSession()
+  },)
 
   return (
     <motion.div

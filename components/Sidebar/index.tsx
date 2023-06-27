@@ -7,8 +7,7 @@ import albusPhoto from "@/public/albus.webp"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { AtSign, Calendar, Users } from "lucide-react"
 import { CiLogout } from "react-icons/ci"
-
-import { WorkspaceComponent } from "./Workspace"
+import { WorkspaceComponent } from "./Workspace";
 
 const ButtonsArray = [
   {
@@ -43,15 +42,17 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
     <div className="w-[100vw] h-screen flex bg-white">
       <section
         id="left"
-        className="w-[20vw] h-screen flex flex-col border-r p-3 bg-neutral-100"
+        className="w-[20vw] h-screen flex flex-col p-3 bg-neutral-100"
       >
         <div className="w-full h-36 rounded-lg flex items-center justify-center p-3">
           <Image className="max-w-[160px]" src={albusPhoto} alt="" />
         </div>
 
+
+      <WorkspaceComponent />
     
 
-        <div className="w-full flex flex-col gap-3 p-3">
+        <div className="w-full flex flex-col mt-4 gap-3 p-3">
           {ButtonsArray.map((item, index) => (
             <div
               key={index}
