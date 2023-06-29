@@ -1,6 +1,9 @@
 "use client"
 
+import { UserAtom } from "@/atoms/user";
 import { WorkspaceAtom } from "@/atoms/workspace";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { useAtom } from "jotai";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -9,14 +12,27 @@ import React from "react";
 interface WorkspaceProps { 
     name: string;
     id: string;
+    user: PostgrestSingleResponse<any>
 }
 
 
-export const WorkspaceItem: React.FC<WorkspaceProps> = ({id, name}) => {
+export const WorkspaceItem: React.FC<WorkspaceProps> = ({id, name, user}) => {
     const [, setWorkspace] = useAtom(WorkspaceAtom)
+    const [, setUser] = useAtom(UserAtom)
+    const supabase = createClientComponentClient()
     const router = useRouter()
+    console.log(user)
 
     async function handleClick() {
+        setUser((content) => ({
+            ...content,
+            user: {
+                id: user.data[0].id,
+                admin: user.data[0].admin,
+                name: user.data[0].name,
+                email: user.data[0].email
+            }
+        }))
         setWorkspace((content) => ({
             ...content,
             workspace_id: id,

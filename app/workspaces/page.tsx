@@ -4,6 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { WorkspaceItem } from "@/components/Workspaces/WorkspaceItem"
 import { WorkspacesSidebar } from "@/components/Workspaces/WorkspacesSidebar"
+import { PostgrestSingleResponse } from "@supabase/supabase-js"
 
 export default async function WorkspacesPage() {
   const supabase = createServerComponentClient({ cookies })
@@ -14,12 +15,10 @@ export default async function WorkspacesPage() {
     redirect("/auth/login")
   }
 
-  const user: any = await supabase
+  const user: PostgrestSingleResponse<any> = await supabase
     .from("users")
     .select("*")
     .eq("user_id", session.data.session?.user.id)
-
-  console.log(user)
 
   async function getWorkspaces() {
     if (!user.data[0].admin) {
@@ -52,7 +51,7 @@ export default async function WorkspacesPage() {
 
       <section className="w-full max-w-[800px] flex flex-wrap gap-10 mt-20">
         {workspaces?.map((item: any, index: number) => {
-          return <WorkspaceItem key={index} id={item.id} name={item.name} />
+          return <WorkspaceItem  key={index} id={item.id} name={item.name} user={user} />
         })}
       </section>
     </WorkspacesSidebar>
