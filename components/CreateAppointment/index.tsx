@@ -9,39 +9,38 @@ import { z } from "zod";
 
 
 
+import { Appointment } from "@/types/appointment";
 import { Clients } from "@/types/clients";
-import { supabase } from "@/lib/supabase"
+import { supabase } from "@/lib/supabase";
 
-import { SidesectionAtom } from "../../atoms/sidesection"
+
+
+import { SidesectionAtom } from "../../atoms/sidesection";
 import { useToast } from "../ui/use-toast";
 import { ClientInfos } from "./ClientInfos";
-import { CpfForm } from "./cpfForm";
+import { CpfForm } from "./cpfForm"
 
+const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
 
 const FormSchema = z.object({
-  cpf: z
-    .string({ required_error: "Campo obrigatório" })
-    .length(11, { message: "Insira um CPF válido" }),
-  name: z
-    .string({ required_error: "Campo obrigatório" })
-    .min(3, { message: "Insira um nome válido" }),
-  email: z
-    .string({ required_error: "Campo obrigatório" })
-    .email({ message: "Insira um email válido" }),
-  phone: z.object({
-    ddd: z.string().length(2, { message: "DDD deve conter 2 caracteres" }),
-    phoneNumber: z
-      .string()
-      .length(9, { message: "Telefone deve conter 9 caracteres" }),
-  }),
-  born_date: z.object({
-    day: z.string().length(2, { message: "Insira um dia válido" }),
-    month: z.string().length(2, { message: "Insira um mês válido" }),
-    year: z.string().length(4, { message: "Insira um ano válido" }),
-  }),
-  sex: z
-    .string({ required_error: "Campo obrigatório" })
+  room: z
+    .number({ required_error: "Campo obrigatório" })
     .min(1, { message: "Campo obrigatório" }),
+  client_id: z
+    .string({ required_error: "Campo obrigatório" })
+    .uuid({ message: "Insira um cliente válido" }),
+  professional_id: z
+    .string({ required_error: "Campo obrigatório" })
+    .uuid({ message: "Insira um profissional válido" }),
+  service_id: z
+    .string({ required_error: "Campo obrigatório" })
+    .uuid({ message: "Insira um serviço válido" }),
+  finishing_at: z
+    .string({ required_error: "Campo obrigatório" })
+    .regex(dateRegex, { message: "Data não válida" }),
+  starting_at: z
+    .string({ required_error: "Campo obrigatório" })
+    .regex(dateRegex, { message: "Data não válida" }),
 })
 
 type FormType = z.infer<typeof FormSchema>
@@ -62,44 +61,34 @@ export const CreateAppointment: React.FC = () => {
   })
 
   const onSubmit = async ({
-    born_date,
-    email,
-    name,
-    phone,
-    sex,
-    cpf,
+    client_id,
+    finishing_at,
+    professional_id,
+    room,
+    service_id,
+    starting_at,
   }: FormType) => {
     setSubmitting(true)
-    const checkIfAlreadyExists: any = await supabase
-      .from("clients")
-      .select("cpf, email, name")
-      .eq("cpf", cpf)
+    //Check if appointment exists in this time
 
-    if (checkIfAlreadyExists.data[0] !== undefined) {
-      setSubmitting(false)
-      return toast({
-        title: "Erro no cadastro",
-        description: "Já existe um cliente cadastrado com esse CPF",
-        variant: "destructive",
-      })
-    }
+    // if (checkIfAlreadyExists.data[0] !== undefined) {
+    //   setSubmitting(false)
+    //   return toast({
+    //     title: "Erro no cadastro",
+    //     description: "Já existe um cliente cadastrado com esse CPF",
+    //     variant: "destructive",
+    //   })
+    // }
 
-    const insertToDb = await supabase.from("clients").insert({
-      born_date,
-      email,
-      name,
-      phone: `${phone.ddd}${phone.phoneNumber}`,
-      sex,
-      cpf,
-    })
+    //Insert to db funcion
 
-    if (insertToDb.error) {
-      return toast({
-        title: "Erro",
-        description: "Houve algum erro inesperado",
-        variant: "destructive",
-      })
-    }
+    // if (insertToDb.error) {
+    //   return toast({
+    //     title: "Erro",
+    //     description: "Houve algum erro inesperado",
+    //     variant: "destructive",
+    //   })
+    // }
 
     setSubmitting(false)
     toast({

@@ -93,7 +93,7 @@ export const DayColumn = () => {
   }, [ScheduleRef?.current?.scrollHeight])
   return (
     
-    <div className="w-[26vw] h-full flex">
+    <div className="w-[25rem] h-full flex">
     <div ref={ScheduleRef} className="w-full h-[75vh] relative">
 
         {Array.from({ length: 48 }).map((_, index) => {
