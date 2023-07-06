@@ -7,32 +7,45 @@ import { WorkspaceAtom } from "@/atoms/workspace";
 import albusPhoto from "@/public/albus.webp";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
-import { AtSign, Calendar, Users } from "lucide-react";
+import { AtSign, Calendar, Hammer, Users } from "lucide-react";
 import { CiLogout } from "react-icons/ci"
 
 import { WorkspaceComponent } from "./Workspace"
+import { UserAtom } from "@/atoms/user";
 
 export const Sidebar = ({ children }: { children: ReactNode }) => {
   const [workspace] = useAtom(WorkspaceAtom)
+  const [user] = useAtom(UserAtom)
   const supabase = createClientComponentClient()
   const path = usePathname()
   const router = useRouter()
+
+
 
   const ButtonsArray = [
     {
       text: "Calendário",
       route: `/${workspace?.workspace_id}/dashboard/calendar`,
       icon: <Calendar size={24} />,
+      admin: false
     },
     {
       text: "Clientes",
       route: `/${workspace?.workspace_id}/dashboard/clients`,
       icon: <Users size={24} />,
+      admin: false
     },
     {
       text: "Profissionais",
       route: `/${workspace?.workspace_id}/dashboard/professionals`,
       icon: <AtSign size={24} />,
+      admin: false
+    },
+    {
+      text: "Services",
+      route: `/${workspace?.workspace_id}/dashboard/services`,
+      icon: <Hammer size={24} />,
+      admin: true
     },
   ]
 
@@ -55,18 +68,24 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
         <WorkspaceComponent />
 
         <div className="w-full flex flex-col mt-4 gap-3 p-3">
-          {ButtonsArray.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => router.push(item.route)}
-              className={`w-full h-14 pl-4 rounded-lg ${
-                path === item.route ? "bg-neutral-100 text-gray-900" : ""
-              } hover:bg-neutral-200 hover:text-neutral-900 flex items-center gap-x-3 text-gray-600 cursor-pointer duration-150`}
-            >
-              <div className="w-10 flex justify-center">{item.icon}</div>{" "}
-              <p className="w-full">{item.text}</p>
-            </div>
-          ))}
+          {ButtonsArray.map((item, index) => {
+            if(!user?.user.admin && item.admin) {
+              return
+            }
+            
+            return  (
+              <div
+                key={index}
+                onClick={() => router.push(item.route)}
+                className={`w-full h-14 pl-4 rounded-lg ${
+                  path === item.route ? "bg-neutral-100 text-gray-900" : ""
+                } hover:bg-neutral-200 hover:text-neutral-900 flex items-center gap-x-3 text-gray-600 cursor-pointer duration-150`}
+              >
+                <div className="w-10 flex justify-center">{item.icon}</div>{" "}
+                <p className="w-full">{item.text}</p>
+              </div>
+            ) 
+          })}
         </div>
         <div
           onClick={handleSignOut}

@@ -35,7 +35,7 @@ export default function CalendarPage() {
     <>
       <main className="flex h-screen flex-col bg-white">
         <ScheduleHeader />
-        <div className="p-3 h-[90vh] overflow-auto bg-neutral-50">
+        <div  className="p-3 h-[90vh] overflow-auto bg-neutral-50">
           <ScheduleBackground />
         </div>
       </main>
