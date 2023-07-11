@@ -9,9 +9,9 @@ export const ScheduleBackground = () => {
 
   return (
     <>
-      <section className="w-[80vw] h-full bg-white">
+      <section className="w-[80vw] h-full bg-white rounded-xl">
         <BoardHeader />
-        <div className="w-[80vw] flex mt-10 h-full overflow-x-auto p-3" >
+        <div className="w-[80vw] flex mt-10 h-full  overflow-x-auto p-3" >
           <TimeSection />
           <DayColumn />
           <DayColumn />

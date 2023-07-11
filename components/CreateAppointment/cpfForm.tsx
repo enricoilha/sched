@@ -1,15 +1,20 @@
-import { Dispatch, useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { SetStateAction } from "jotai"
-import { useForm } from "react-hook-form"
-import { FiLoader } from "react-icons/fi"
-import { z } from "zod"
-import { motion } from "framer-motion"
+import { Dispatch, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { SetStateAction } from "jotai";
+import { useForm } from "react-hook-form";
+import { FiLoader } from "react-icons/fi";
+import { z } from "zod";
 
-import { Clients } from "@/types/clients"
-import { supabase } from "@/lib/supabase"
 
-import { TextInput } from "../TextInput"
+
+import { Clients } from "@/types/clients";
+import { supabase } from "@/lib/supabase";
+
+
+
+import { CpfInput } from "../CpfInput";
+import { TextInput } from "../TextInput";
 import { useToast } from "../ui/use-toast"
 import { NewClientButton } from "./newClientButton"
 
@@ -28,7 +33,7 @@ interface CpfFormProps {
 export const CpfForm: React.FC<CpfFormProps> = ({ setClient }) => {
   const { toast } = useToast()
   const [checking, setChecking] = useState<boolean>(false)
-  const [ createNewCLient, setCreateNewClient ] = useState<boolean>(false)
+  const [createNewCLient, setCreateNewClient] = useState<boolean>(false)
   const {
     handleSubmit,
     register,
@@ -63,14 +68,14 @@ export const CpfForm: React.FC<CpfFormProps> = ({ setClient }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-1 justify-center items-center"
     >
-      <TextInput
+      <CpfInput
         register={{ ...register("cpf") }}
         title="Pequisar CPF"
         error={errors.cpf}
       />
 
       {createNewCLient && <NewClientButton />}
-  
+
       <button
         type="submit"
         disabled={checking && checking}
