@@ -2,7 +2,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai"
-import {  ChevronsRight } from "lucide-react"
+import { ChevronsRight } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { FiLoader } from "react-icons/fi"
 import { z } from "zod"
@@ -18,6 +18,7 @@ import { useToast } from "../ui/use-toast"
 import { WorkspaceAtom } from "@/atoms/workspace";
 import { Input } from "../ui/input";
 import { NumberInput } from "../NumberInput";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   service_name: z
@@ -27,10 +28,10 @@ const FormSchema = z.object({
     .string({ required_error: "Campo obrigatório" })
     .optional(),
   duration: z.number({
-    required_error: "Campo obrigatório", 
+    required_error: "Campo obrigatório",
     invalid_type_error: "Campo obrigatório"
-    }).int().positive().gt(5, {message: "Mínimo 5 minutos"}),
-  
+  }).int().positive().gt(5, { message: "Mínimo 5 minutos" }),
+
 })
 
 type FormType = z.infer<typeof FormSchema>
@@ -43,7 +44,8 @@ export const CreateService = ({ closeFunction }: CreateServiceProps) => {
   const { toast } = useToast()
   const [submitting, setSubmitting] = useState<boolean>(false)
   const [, setSidesection] = useAtom(SidesectionAtom)
-  const [ workspace, setWorkspace] = useAtom(WorkspaceAtom)
+  const [workspace] = useAtom(WorkspaceAtom)
+  const router = useRouter(NumberInput)
   const {
     register,
     handleSubmit,
@@ -53,17 +55,50 @@ export const CreateService = ({ closeFunction }: CreateServiceProps) => {
   })
 
   const onSubmit = async ({
-   description,
-   duration,
-   service_name,
+    description,
+    duration,
+    service_name,
   }: FormType) => {
     setSubmitting(true)
+    const checkIfAlreadyExists: any = await supabase
+      .from("services")
+      .select("*")
+      .eq("service_name", service_name)
 
-    console.log(duration)
-   
-    
+    if (checkIfAlreadyExists.data[0] !== undefined) {
+      setSubmitting(false)
+      return toast({
+        title: "Erro no cadastro",
+        description: "Já existe um serviço cadastrado com esse nome",
+        variant: "destructive",
+      })
+    }
 
-    return setSidesection((content) => ({ ...content, isOpen: false }))
+    const insertToDb = await supabase.from("services").insert({
+      service_name,
+      duration,
+      description,
+      user_id: workspace?.user?.id,
+      workspace_id: workspace?.workspace_id
+    })
+
+    if (insertToDb.error) {
+      return toast({
+        title: "Erro",
+        description: "Houve algum erro inesperado",
+        variant: "destructive",
+      })
+    }
+
+    setSubmitting(false)
+    toast({
+      title: "Sucesso",
+      description: "Profissional cadastrado com sucesso",
+    })
+    3
+    await fetch('/api/revalidate')
+    setSidesection((content) => ({ ...content, isOpen: false }))
+    return router.refresh()
   }
 
   return (
@@ -98,12 +133,12 @@ export const CreateService = ({ closeFunction }: CreateServiceProps) => {
           error={errors?.description}
         />
 
-          <NumberInput 
+        <NumberInput
           title="Duração (Minutos)"
           placeholder="Ex: 30"
           register={{ ...register("duration", { valueAsNumber: true }) }}
           error={errors?.duration}
-          />
+        />
 
         <button
           className="bg-gray-800 hover:bg-black duration-100 rounded-md w-44 py-2 mx-auto mt-2 text-white flex items-center justify-center"

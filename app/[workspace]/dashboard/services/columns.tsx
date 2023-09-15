@@ -10,11 +10,11 @@ import { Professionals } from "@/types/professionals";
 
 export const columns: ColumnDef<Professionals>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "service_name",
     header: () => <div className="text-left">Nome</div>,
   },
   {
-    accessorKey: "role",
+    accessorKey: "duration",
     header: () => <div className="text-left">Ocupação</div>,
   },
 ]

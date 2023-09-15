@@ -3,15 +3,18 @@
 import { ReactNode } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { UserAtom } from "@/atoms/user";
 import { WorkspaceAtom } from "@/atoms/workspace";
 import albusPhoto from "@/public/albus.webp";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
 import { AtSign, Calendar, Hammer, Users } from "lucide-react";
-import { CiLogout } from "react-icons/ci"
+import { CiLogout } from "react-icons/ci";
 
-import { WorkspaceComponent } from "./Workspace"
-import { UserAtom } from "@/atoms/user";
+
+
+import { WorkspaceComponent } from "./Workspace";
+
 
 export const Sidebar = ({ children }: { children: ReactNode }) => {
   const [workspace] = useAtom(WorkspaceAtom)
@@ -27,25 +30,25 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
       text: "Calendário",
       route: `/${workspace?.workspace_id}/dashboard/calendar`,
       icon: <Calendar size={24} />,
-      admin: false
+      admin: false,
     },
     {
       text: "Clientes",
       route: `/${workspace?.workspace_id}/dashboard/clients`,
       icon: <Users size={24} />,
-      admin: false
+      admin: false,
     },
     {
       text: "Profissionais",
       route: `/${workspace?.workspace_id}/dashboard/professionals`,
       icon: <AtSign size={24} />,
-      admin: false
+      admin: false,
     },
     {
-      text: "Services",
+      text: "Serviços",
       route: `/${workspace?.workspace_id}/dashboard/services`,
       icon: <Hammer size={24} />,
-      admin: true
+      admin: true,
     },
   ]
 

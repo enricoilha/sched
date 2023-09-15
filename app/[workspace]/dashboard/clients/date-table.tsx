@@ -36,17 +36,23 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [ columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [ rowSelection, setRowSelection ] = useState({})
 
   const table = useReactTable({
     data,
     columns,
+    enableRowSelection: true,
+    enableMultiRowSelection: true,
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    debugTable: true,
     state: {
       sorting,
       columnFilters,
+      rowSelection
     },
     initialState: {
       pagination: {
@@ -72,7 +78,7 @@ export function DataTable<TData, TValue>({
       <div className="border rounded-md" >
 
       <Table  >
-        <TableHeader className="" >
+        <TableHeader className="bg-muted/50" >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow className="" key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -90,7 +96,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody className="" >
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
