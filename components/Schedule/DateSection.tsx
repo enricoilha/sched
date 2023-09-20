@@ -100,7 +100,7 @@ export const DateSection = () => {
     <section className="flex items-center justify-center gap-x-4 font-light px-2">
       <div
         onClick={onClickLeft}
-        className="h-10 w-10 flex items-center justify-center rounded- hover:bg-gray-100 duration-150 border   cursor-pointer text-gray-700"
+        className="h-10 w-10 flex items-center justify-center rounded- hover:bg-gray-100 duration-150 border rounded-md cursor-pointer text-gray-700"
       >
         <ChevronLeft size={22} />
       </div>
@@ -108,7 +108,7 @@ export const DateSection = () => {
       <div
         ref={buttonRef}
         onClick={() => setOpenCalendar(true)}
-        className="px-5 w-40  text-center h-10 border hover:bg-gray-100 rounded-md flex text-base items-center justify-center  duration-150 cursor-pointer relative"
+        className="px-5 w-52  text-center h-10 border hover:bg-gray-100 rounded-md flex text-base items-center justify-center  duration-150 cursor-pointer relative"
       >
         <p className="" >{date.day} de {monthWritten}</p>
         {openCalendar && (

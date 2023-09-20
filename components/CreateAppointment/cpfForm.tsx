@@ -1,20 +1,14 @@
 import { Dispatch, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
 import { SetStateAction } from "jotai";
 import { useForm } from "react-hook-form";
 import { FiLoader } from "react-icons/fi";
 import { z } from "zod";
 
-
-
 import { Clients } from "@/types/clients";
 import { supabase } from "@/lib/supabase";
 
-
-
 import { CpfInput } from "../CpfInput";
-import { TextInput } from "../TextInput";
 import { useToast } from "../ui/use-toast"
 import { NewClientButton } from "./newClientButton"
 

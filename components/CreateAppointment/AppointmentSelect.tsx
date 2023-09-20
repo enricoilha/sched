@@ -1,9 +1,5 @@
 import {
-  Controller,
-  ControllerProps,
   FieldError,
-  FieldPath,
-  FieldValues,
 } from "react-hook-form"
 
 import {
@@ -13,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Professionals } from "@/types/professionals"
 
 type SelectProps = {
   error?: FieldError
@@ -20,10 +17,7 @@ type SelectProps = {
   onBlur: any
   value: string
   title: string
-  options: {
-    text: string
-    id: string
-  }[]
+  options?: Pick<Professionals, 'id' | 'name' | 'role' | 'sex'>[];
 }
 
 export const AppointmentSelect: React.FC<SelectProps> = ({
@@ -41,16 +35,15 @@ export const AppointmentSelect: React.FC<SelectProps> = ({
       <Select onValueChange={onChange} defaultValue={value}>
         <SelectTrigger
           onBlur={onBlur}
-          className={`h-9 w-full bg-white rounded-md outline outline-[.5px] outline-gray-400  focus-within:outline-[.5px] focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-200 px-2 duration-100 font-light text-gray-800 text-sm shadow-sm ${
-            error ? "outline-red-500" : ""
-          }`}
+          className={`h-9 w-full bg-white rounded-md outline outline-[.5px] outline-gray-400  focus-within:outline-[.5px] focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-200 px-2 duration-100 font-light text-gray-800 text-sm shadow-sm ${error ? "outline-red-500" : ""
+            }`}
         >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {options.map((item, index) => (
+          {options?.map((item, index) => (
             <SelectItem value={item.id} key={index}>
-              {item.text}
+              {item.name} - {item.role}
             </SelectItem>
           ))}
         </SelectContent>

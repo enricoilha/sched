@@ -1,7 +1,7 @@
-import { atom } from "jotai"
 import dayjs from "dayjs"
+import { atomWithReset } from "jotai/utils";
 
-interface DateAtomProps {
+export interface DateAtomProps {
     day: any;
     month: any;
     year: any
@@ -9,7 +9,7 @@ interface DateAtomProps {
 }
 
 
-export const DateAtom = atom<DateAtomProps>({
+export const DateAtom = atomWithReset<DateAtomProps>({
     day: dayjs().date(),
     month: dayjs().month(),
     year: dayjs().year()})

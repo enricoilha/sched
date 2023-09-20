@@ -1,6 +1,6 @@
 "use client"
 
-import {  useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import albus from "@/public/albus.webp"
@@ -51,17 +51,16 @@ export default function LoginPage() {
       setLoading(false)
       return user.error.status === 400
         ? toast({
-            title: "Não foi possível realizar o login",
-            description: "Credenciais inválidas",
-            variant: "destructive",
-          })
+          title: "Não foi possível realizar o login",
+          description: "Credenciais inválidas",
+          variant: "destructive",
+        })
         : toast({
-            title: "Não foi possível realizar o login",
-            variant: "destructive",
-          })
+          title: "Não foi possível realizar o login",
+          variant: "destructive",
+        })
     }
 
-    setLoading(false)
     router.push("/workspaces")
   }
 

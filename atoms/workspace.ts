@@ -1,20 +1,18 @@
+import { Professionals } from "@/types/professionals";
 import { atomWithStorage } from "jotai/utils";
+import { ServiceType } from "@/types/service"
 
-type WorkspaceProps = {
-    workspace_id: string;
-    wodkspace_name: string;
-    user?: {
-        id: string;
-        email: string;
-        name: string;
-    }
-    professionals?: {
-        name: string;
-        role: string;
-        sex: string;
-        cpf: string;
-        phone: string;
-    }[]
+export type WorkspaceProps = {
+  workspace_id?: string;
+  wodkspace_name?: string;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+  }
+  professionals?: Pick<Professionals, 'id' | 'name' | 'role' | 'sex'>[];
+
+  services?: Pick<ServiceType, 'id' | 'service_name' | 'duration'>[]
 }
 
-export const WorkspaceAtom = atomWithStorage<WorkspaceProps | null>("workspace",null)
+export const WorkspaceAtom = atomWithStorage<WorkspaceProps | null>("workspace", null)

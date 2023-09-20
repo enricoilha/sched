@@ -1,14 +1,13 @@
 import { atomWithStorage } from "jotai/utils";
 
- 
+
 interface AtomProps {
-   user: {
+  user: {
     id: string;
     name: string;
     email: string;
     admin: boolean;
-   }
+  }
 }
 
-export const UserAtom = atomWithStorage<AtomProps | null>("user" , null)
-
+export const UserAtom = atomWithStorage<AtomProps | null>("user", null)

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai"
-import {  ChevronsRight } from "lucide-react"
+import { ChevronsRight } from "lucide-react"
 import { useForm, Controller } from "react-hook-form"
 import { FiLoader } from "react-icons/fi"
 import { z } from "zod"
@@ -17,8 +17,9 @@ import { SexInput } from "../SexInput"
 import { TextInput } from "../TextInput"
 import { useToast } from "../ui/use-toast"
 
-import {  RoleSelect } from "./RoleSelect";
+import { RoleSelect } from "./RoleSelect";
 import { useRouter } from "next/navigation";
+import { WorkspaceAtom } from "@/atoms/workspace";
 
 const FormSchema = z.object({
   name: z
@@ -26,7 +27,7 @@ const FormSchema = z.object({
     .min(3, { message: "Insira um nome válido" }),
   role: z
     .string({ required_error: "Campo obrigatório" })
-    .min(3,{ message: "Campo obrigatório" }),
+    .min(3, { message: "Campo obrigatório" }),
   cpf: z
     .string({ required_error: "Campo obrigatório" })
     .length(11, { message: "Insira um CPF válido" }),
@@ -48,6 +49,7 @@ export const CreateWorker: React.FC = () => {
   const router = useRouter()
   const { toast } = useToast()
   const [submitting, setSubmitting] = useState<boolean>(false)
+  const [workspace] = useAtom(WorkspaceAtom)
   const [, setSidesection] = useAtom(SidesectionAtom)
   const {
     control,
@@ -88,6 +90,7 @@ export const CreateWorker: React.FC = () => {
       phone: phoneAndDDD,
       sex,
       cpf,
+      workspace_id: workspace?.workspace_id
     })
 
     if (insertToDb.error) {
@@ -139,15 +142,15 @@ export const CreateWorker: React.FC = () => {
           control={control}
           name="role"
           render={({ field }) => (
-            <RoleSelect 
-              error={errors.role} 
-              value={field.value} 
-              onBlur={field.onBlur} 
-              onChange={field.onChange} 
-              title="Ocupação"   
+            <RoleSelect
+              error={errors.role}
+              value={field.value}
+              onBlur={field.onBlur}
+              onChange={field.onChange}
+              title="Ocupação"
             />
           )}
-          />
+        />
 
         <div className="w-full flex items-center gap-x-3">
           <TextInput
@@ -169,7 +172,7 @@ export const CreateWorker: React.FC = () => {
             error={errors?.phone}
           />
 
-        <SexInput
+          <SexInput
             title="Sexo"
             register={{ ...register("sex") }}
             error={errors?.sex}
