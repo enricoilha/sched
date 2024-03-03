@@ -48,14 +48,16 @@ export function AppointmentForm({}: AppointmentFormProps) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const { handleSubmit, control, watch } = useForm<FormType>({});
 
-  console.log(
-    dayjs()
-      .year(date.year)
-      .month(date.month)
-      .date(date.day)
-      .hour(5)
-      .toISOString(),
-  );
+  // console.log(
+  //   dayjs()
+  //     .year(date.year)
+  //     .month(date.month)
+  //     .date(date.day)
+  //     .hour(5)
+  //     .toISOString(),
+  // );
+
+  console.log(findAvailableTime(15, date));
 
   async function onSubmit(fields: FormType) {
     console.log(fields);
@@ -70,10 +72,10 @@ export function AppointmentForm({}: AppointmentFormProps) {
     let hours = new Array();
   }
 
-  useEffect(() => {
-    console.log(watch().service_id);
-    findAvailableTime(15, date);
-  }, [watch().service_id]);
+  // useEffect(() => {
+  //   console.log(watch().service_id);
+  //   findAvailableTime(15, date);
+  // }, []);
 
   return (
     <motion.div
