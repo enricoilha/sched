@@ -9,12 +9,12 @@ interface LoginBody {
 }
 
 export default async function POST(request: Request) {
-    
-    if(!request.body) {
+
+    if (!request.body) {
         throw new Error(`Request body can't be  NULL`)
     }
     const { email, password } = request.body
-    
+
     const supabase = createServerComponentClient({ cookies })
 
     const user = await supabase.auth.signInWithPassword({

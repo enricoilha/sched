@@ -6,17 +6,15 @@ import { CiCalendar } from "react-icons/ci";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { IoPersonOutline } from "react-icons/io5";
 
-
-
 import { SidesectionAtom } from "../../atoms/sidesection";
-import { CreateAppointment } from "../CreateAppointment"
-import { CreateClient } from "../CreateClient"
+import { CreateAppointment } from "../CreateAppointment";
+import { CreateClient } from "../CreateClient";
 
 export const NewSection = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [, setSidesection] = useAtom(SidesectionAtom)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [, setSidesection] = useAtom(SidesectionAtom);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   const buttonsArray = useMemo(() => {
     return [
@@ -42,8 +40,8 @@ export const NewSection = () => {
             buttonRef,
           })),
       },
-    ]
-  }, [])
+    ];
+  }, []);
 
   const handleClick = (e: any) => {
     if (
@@ -51,36 +49,36 @@ export const NewSection = () => {
       !dropdownRef.current.contains(e.target) &&
       !buttonRef?.current?.contains(e.target)
     ) {
-      return setIsOpen(false)
+      return setIsOpen(false);
     }
-  }
+  };
 
   useEffect(() => {
-    document.addEventListener("click", handleClick)
+    document.addEventListener("click", handleClick);
 
-    return () => document.removeEventListener("click", handleClick)
-  }, [])
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
 
   return (
     <>
       <div
         ref={buttonRef}
         onClick={() => setIsOpen(true)}
-        className="py-[.3rem] rounded bg-emerald-500 hover:bg-green-600 duration-150 cursor-pointer flex items-center gap-x-2 px-5 text-white relative"
+        className="relative flex cursor-pointer items-center gap-x-2 rounded-md bg-emerald-500 px-7 py-[.3rem] text-white duration-150 hover:bg-emerald-600"
       >
-        <HiOutlinePlusSm size={24} />
+        <HiOutlinePlusSm size={20} />
         <p>Novo</p>
 
         {isOpen && (
           <div
             ref={dropdownRef}
-            className="w-60 min-h-10 bg-white shadow z-50 border absolute top-12 left-0 rounded-md p-2 flex flex-col gap-1"
+            className="min-h-10 absolute left-0 top-12 z-50 flex w-60 flex-col gap-1 rounded-md border bg-white p-2 shadow"
           >
             {buttonsArray.map((item, index) => (
               <div
                 key={index}
                 onClick={item.openFunction}
-                className="w-full h-10 flex items-center gap-x-2 rounded hover:bg-gray-100 duration-100 p-2 font-light text-gray-800"
+                className="flex h-10 w-full items-center gap-x-2 rounded p-2 font-light text-gray-800 duration-100 hover:bg-gray-100"
               >
                 <div className="w-8">{item.icon}</div> {item.text}
               </div>
@@ -89,5 +87,5 @@ export const NewSection = () => {
         )}
       </div>
     </>
-  )
-}
+  );
+};

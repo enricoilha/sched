@@ -1,15 +1,25 @@
-import "@/styles/globals.css"
-import { Metadata } from "next"
+import "@/styles/globals.css";
+import { Metadata } from "next";
 
-import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
-import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { ThemeProvider } from "@/components/theme-provider"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
+import { siteConfig } from "@/config/site";
+import {
+  JetBrains_Mono as FontMono,
+  Inter as FontSans,
+} from "next/font/google";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { ThemeProvider } from "@/components/theme-provider";
+
+export const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+export const fontMono = FontMono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -26,15 +36,13 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-}
+};
 
 interface RootLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-
-
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -42,11 +50,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
+            fontSans.variable,
           )}
         >
           <Toaster />
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            forcedTheme="light"
+          >
             <div className="relative flex min-h-screen flex-col">
               <div className="flex-1">{children}</div>
             </div>
@@ -55,5 +68,5 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         </body>
       </html>
     </>
-  )
+  );
 }

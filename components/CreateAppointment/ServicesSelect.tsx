@@ -8,6 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ServiceType } from "@/types/service";
+import { Database } from "@/types/supabase";
+import { Clock } from "lucide-react";
 
 type SelectProps = {
   error?: FieldError;
@@ -15,7 +17,7 @@ type SelectProps = {
   onBlur: any;
   value: string;
   title: string;
-  options?: Pick<ServiceType, "id" | "service_name" | "duration">[];
+  options?: Database["public"]["Tables"]["services"]["Row"][];
 };
 
 export const ServicesSelect: React.FC<SelectProps> = ({
@@ -42,7 +44,9 @@ export const ServicesSelect: React.FC<SelectProps> = ({
         <SelectContent>
           {options?.map((item, index) => (
             <SelectItem value={item.id} key={index}>
-              {item.service_name} - {item.duration} min
+              <div className="flex items-center gap-x-2">
+                {item.service_name} <Clock size={14} /> {item.duration} min
+              </div>
             </SelectItem>
           ))}
         </SelectContent>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
-import { DateAtom } from "../atoms/date";
 import { useAtom } from "jotai";
 dayjs.extend(weekday);
 
@@ -33,12 +32,20 @@ interface ComponentProps {
   clickFunction?: any;
 }
 
-export const DatepickerComponent = ({ clickFunction }: ComponentProps) => {
+export const AppointmentDatePicker = ({ clickFunction }: ComponentProps) => {
   const [monthDays, setMonthDays] = useState<MonthDaysProps[] | []>([]);
   const [blanks, setBlanks] = useState<any[]>();
-  const [date, setDate] = useAtom(DateAtom);
-  const [calendarMonth, setCalendarMonth] = useState<number>(date.month);
-  const [calendarYear, setCalendarYear] = useState<number>(date.year);
+  const [calendarMonth, setCalendarMonth] = useState<number>(
+    dayjs(new Date()).month(),
+  );
+  const [calendarYear, setCalendarYear] = useState<number>(
+    dayjs(new Date()).year(),
+  );
+  const [date, setDate] = useState({
+    day: dayjs(new Date()).date(),
+    month: dayjs(new Date()).month(),
+    year: dayjs(new Date()).year(),
+  });
 
   const createDatesArray = () => {
     const days = dayjs().year(calendarYear).month(calendarMonth).daysInMonth();
@@ -58,7 +65,7 @@ export const DatepickerComponent = ({ clickFunction }: ComponentProps) => {
     const monthDaysArray: MonthDaysProps[] = [];
 
     [...Array(days)].map((_, index: number) => {
-      let weekday = dayjs(date.day)
+      let weekday = dayjs()
         .date(index + 1)
         .weekday();
 
@@ -81,7 +88,9 @@ export const DatepickerComponent = ({ clickFunction }: ComponentProps) => {
       year: calendarYear,
     }));
 
-    return clickFunction(`${day}-${date.month}-${date.year}`);
+    return clickFunction(
+      dayjs(`${date.year}-${date.month}-${day}`).toISOString(),
+    );
   };
 
   useEffect(() => {
@@ -89,8 +98,8 @@ export const DatepickerComponent = ({ clickFunction }: ComponentProps) => {
   }, [calendarMonth]);
 
   return (
-    <div className="flex min-h-[17vh] w-full flex-col items-center justify-center rounded">
-      <div className="flex w-full items-center justify-evenly">
+    <div className="flex min-h-[17vh] w-64 flex-col items-center justify-center rounded">
+      <div className="flex w-full items-center justify-between">
         <MdKeyboardArrowLeft
           onClick={() => {
             if (calendarMonth !== 0) {
@@ -103,7 +112,7 @@ export const DatepickerComponent = ({ clickFunction }: ComponentProps) => {
           className="cursor-pointer  rounded hover:bg-gray-200"
           size={24}
         />
-        <p className="w-fit">{monthsArray[calendarMonth]} -</p>
+        <p className="w-fit ">{monthsArray[calendarMonth]}</p>
         <p>{calendarYear}</p>
 
         <MdKeyboardArrowRight

@@ -47,6 +47,8 @@ export default function LoginPage() {
       password: fields.password,
     })
 
+    console.log(user.error?.status)
+
     if (user.error) {
       setLoading(false)
       return user.error.status === 400

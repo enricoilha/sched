@@ -9,16 +9,15 @@ export const ScheduleBackground = () => {
 
   return (
     <>
-      <section className="w-[80vw] h-full bg-white shadow-sm rounded-xl">
+      <section className="h-full w-[80vw] overflow-hidden rounded-xl bg-white shadow-sm">
         <BoardHeader />
-        <div className="w-[80vw] flex mt-10 h-full overflow-x-auto p-3 pb-0" >
+        <div className="mt-10 flex h-full w-[80vw] overflow-x-auto p-3 pb-0">
           <TimeSection />
           <DayColumn />
           <DayColumn />
           <DayColumn />
           <DayColumn />
           <DayColumn />
-
         </div>
       </section>
     </>

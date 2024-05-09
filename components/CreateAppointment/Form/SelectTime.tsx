@@ -1,32 +1,31 @@
-import { FieldError } from "react-hook-form";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Professionals } from "@/types/professionals";
-import { Database } from "@/types/supabase";
+} from "components/ui/select";
+import { ChevronDown } from "lucide-react";
+import { FieldError } from "react-hook-form";
 
-type SelectProps = {
-  error?: FieldError;
+interface SelectHoursProps {
   onChange: any;
-  onBlur: any;
-  value: string;
   title: string;
-  options?: Database["public"]["Tables"]["professionals"]["Row"][];
-};
+  value: string;
+  onBlur: any;
+  error?: FieldError;
+  options: any[];
+}
 
-export const AppointmentSelect: React.FC<SelectProps> = ({
+export function SelectTime({
   error,
   onBlur,
   onChange,
-  value,
-  title,
   options,
-}) => {
+  title,
+  value,
+}: SelectHoursProps) {
   return (
     <div className="relative flex w-full flex-col pb-5">
       <p className="mb-1 text-sm font-medium text-gray-600">{title}</p>
@@ -41,11 +40,13 @@ export const AppointmentSelect: React.FC<SelectProps> = ({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {options?.map((item, index) => (
-            <SelectItem value={item.id} key={index}>
-              {item.name} - {item.role}
-            </SelectItem>
-          ))}
+          <ScrollArea className="relative h-32">
+            {options?.map((item, index) => (
+              <SelectItem key={`ItemSelectHourKey-${index}`} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </ScrollArea>
         </SelectContent>
       </Select>
       <p className="absolute -bottom-1 font-light text-red-500">
@@ -53,4 +54,4 @@ export const AppointmentSelect: React.FC<SelectProps> = ({
       </p>
     </div>
   );
-};
+}
