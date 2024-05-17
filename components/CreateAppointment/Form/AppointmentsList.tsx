@@ -1,8 +1,21 @@
 import { Database } from "@/types/supabase";
 import { CalendarSearch } from "lucide-react";
+import { AppointmentListItemType } from "../Types/AppointmentListItemType";
+
+interface ListItemProps {
+  appointment: AppointmentListItemType;
+}
+
+const AppointmentListItem = ({ appointment }: ListItemProps) => {
+  return (
+    <div className="item-center flex justify-around">
+      {appointment.services?.duration}
+    </div>
+  );
+};
 
 interface ComponentProps {
-  appointments: Database["public"]["Tables"]["appointments"]["Row"][] | [];
+  appointments: AppointmentListItemType[] | [];
 }
 
 export function AppointmentsList({ appointments }: ComponentProps) {
@@ -23,7 +36,10 @@ export function AppointmentsList({ appointments }: ComponentProps) {
       ) : (
         <div className=" w-full">
           {appointments.map((item, _idx) => (
-            <div>{item.professional_id}</div>
+            <AppointmentListItem
+              appointment={item}
+              key={`listitemappkey-${_idx}`}
+            />
           ))}
         </div>
       )}

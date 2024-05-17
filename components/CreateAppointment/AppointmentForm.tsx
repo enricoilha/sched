@@ -20,6 +20,7 @@ import { hours, minutes5in5 } from "@/lib/time";
 import { AlarmCheck } from "lucide-react";
 import { Clients } from "@/types/clients";
 import { useQuery } from "@tanstack/react-query";
+import { AppointmentListItemType } from "./Types/AppointmentListItemType";
 
 interface AppointmentFormProps {
   client: Clients;
@@ -43,7 +44,7 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
   const [workspace] = useAtom(WorkspaceAtom);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [appointments, setAppointments] = useState<
-    Database["public"]["Tables"]["appointments"]["Row"][] | []
+    AppointmentListItemType[] | []
   >([]);
   const [services, setServices] =
     useState<Database["public"]["Tables"]["services"]["Row"][]>();
@@ -117,7 +118,7 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
 
     const { data, error } = await supabase
       .from("workspaces")
-      .select("appointments!inner(*)")
+      .select("appointments!inner(*, services(duration, id, service_name))")
       .filter("appointments.date", "gte", dayjs(watch("date")).toISOString())
       .filter(
         "appointments.date",
