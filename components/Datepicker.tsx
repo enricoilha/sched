@@ -81,7 +81,10 @@ export const DatepickerComponent = ({ clickFunction }: ComponentProps) => {
       year: calendarYear,
     }));
 
-    return clickFunction(`${day}-${date.month}-${date.year}`);
+    if (clickFunction) {
+      return clickFunction(`${day}-${date.month}-${date.year}`);
+    }
+    return;
   };
 
   useEffect(() => {

@@ -89,7 +89,7 @@ export const AppointmentDatePicker = ({ clickFunction }: ComponentProps) => {
     }));
 
     return clickFunction(
-      dayjs(`${date.year}-${date.month}-${day}`).toISOString(),
+      dayjs(`${date.year}-${date.month + 1}-${day}`).toISOString(),
     );
   };
 

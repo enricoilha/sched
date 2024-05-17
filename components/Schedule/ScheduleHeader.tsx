@@ -3,7 +3,7 @@ import { NewSection } from "./NewSection";
 
 export const ScheduleHeader = () => {
   return (
-    <header className="w-full h-[12vh] flex justify-evenly items-center bg-neutral-50">
+    <header className="flex h-[12vh] w-full items-center justify-evenly ">
       <DateSection />
 
       <NewSection />

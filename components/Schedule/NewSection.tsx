@@ -9,6 +9,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import { SidesectionAtom } from "../../atoms/sidesection";
 import { CreateAppointment } from "../CreateAppointment";
 import { CreateClient } from "../CreateClient";
+import { ChevronDown } from "lucide-react";
 
 export const NewSection = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -64,15 +65,15 @@ export const NewSection = () => {
       <div
         ref={buttonRef}
         onClick={() => setIsOpen(true)}
-        className="relative flex cursor-pointer items-center gap-x-2 rounded-md bg-emerald-500 px-7 py-[.3rem] text-white duration-150 hover:bg-emerald-600"
+        className="bg-albusgreen relative flex cursor-pointer items-center gap-x-1 rounded-md border border-emerald-500 px-7 py-[.3rem] text-sm font-medium text-white duration-150 hover:bg-emerald-500 hover:text-white"
       >
-        <HiOutlinePlusSm size={20} />
+        <ChevronDown size={18} />
         <p>Novo</p>
 
         {isOpen && (
           <div
             ref={dropdownRef}
-            className="min-h-10 absolute left-0 top-12 z-50 flex w-60 flex-col gap-1 rounded-md border bg-white p-2 shadow"
+            className="min-h-10 absolute left-0 top-10 z-50 flex w-60 flex-col gap-1 rounded-md border bg-white p-2 shadow"
           >
             {buttonsArray.map((item, index) => (
               <div

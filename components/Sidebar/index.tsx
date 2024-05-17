@@ -57,7 +57,7 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
     <div className="flex h-screen w-[100vw] bg-white">
       <section
         id="left"
-        className="flex h-screen w-[12rem] flex-col border-r-0 bg-neutral-50 p-3"
+        className="flex h-screen w-[12rem] flex-col border-r-0  p-3"
       >
         <div className="flex h-36 w-full items-center justify-center rounded-lg p-3">
           <Image className="max-w-[160px]" src={albusPhoto} alt="" />
@@ -75,9 +75,9 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
               <div
                 key={index}
                 onClick={() => router.push(item.route)}
-                className={`h-10 w-full rounded-lg px-1  ${
-                  path === item.route ? "bg-neutral-100 text-gray-900" : ""
-                } flex cursor-pointer items-center gap-x-3 text-gray-600 duration-150 hover:bg-neutral-200 hover:text-neutral-900`}
+                className={`h-10 w-full rounded-md px-1  ${
+                  path === item.route ? " text-gray-900" : ""
+                } flex cursor-pointer items-center gap-x-3 text-gray-600 duration-150 hover:bg-gray-100 hover:text-neutral-900`}
               >
                 <div className="flex w-10 justify-center">{item.icon}</div>{" "}
                 <p className="w-full text-sm">{item.text}</p>

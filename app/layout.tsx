@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ReactQueryClientProvider } from "@/providers/ReactQueryClientProvider";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -45,28 +46,29 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable,
-          )}
-        >
-          <Toaster />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            forcedTheme="light"
+      <ReactQueryClientProvider>
+        <html lang="en" suppressHydrationWarning>
+          <head />
+          <body
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased",
+              fontSans.variable,
+            )}
           >
-            <div className="relative flex min-h-screen flex-col">
-              <div className="flex-1">{children}</div>
-            </div>
-            <TailwindIndicator />
-          </ThemeProvider>
-        </body>
-      </html>
+            <Toaster />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              forcedTheme="light"
+            >
+              <div className="relative flex min-h-screen flex-col">
+                <div className="flex-1">{children}</div>
+              </div>
+            </ThemeProvider>
+          </body>
+        </html>
+      </ReactQueryClientProvider>
     </>
   );
 }

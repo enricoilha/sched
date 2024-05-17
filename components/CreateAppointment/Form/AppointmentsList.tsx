@@ -6,8 +6,9 @@ interface ComponentProps {
 }
 
 export function AppointmentsList({ appointments }: ComponentProps) {
+  console.log(appointments);
   return (
-    <div>
+    <div className="w-60">
       <p className="text-sm font-medium text-gray-600">
         Agendamentos nessa data
       </p>
@@ -20,7 +21,11 @@ export function AppointmentsList({ appointments }: ComponentProps) {
           </div>
         </div>
       ) : (
-        <div></div>
+        <div className=" w-full">
+          {appointments.map((item, _idx) => (
+            <div>{item.professional_id}</div>
+          ))}
+        </div>
       )}
     </div>
   );

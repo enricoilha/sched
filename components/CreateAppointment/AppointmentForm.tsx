@@ -18,11 +18,12 @@ import { supabase } from "@/lib/supabase";
 import { SelectTime } from "./Form/SelectTime";
 import { hours, minutes5in5 } from "@/lib/time";
 import { AlarmCheck } from "lucide-react";
+import { Clients } from "@/types/clients";
+import { useQuery } from "@tanstack/react-query";
 
-interface AppointmentFormProps {}
-
-const dateRegex =
-  /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+interface AppointmentFormProps {
+  client: Clients;
+}
 
 const FormSchema = z.object({
   professional_id: z
@@ -37,9 +38,9 @@ const FormSchema = z.object({
 });
 
 type FormType = z.infer<typeof FormSchema>;
-export function AppointmentForm({}: AppointmentFormProps) {
+export function AppointmentForm({ client }: AppointmentFormProps) {
   const resetDate = useResetAtom(DateAtom);
-  const [workspace, setWorkspace] = useAtom(WorkspaceAtom);
+  const [workspace] = useAtom(WorkspaceAtom);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [appointments, setAppointments] = useState<
     Database["public"]["Tables"]["appointments"]["Row"][] | []
@@ -49,6 +50,24 @@ export function AppointmentForm({}: AppointmentFormProps) {
 
   const [professionals, setProfessionals] =
     useState<Database["public"]["Tables"]["professionals"]["Row"][]>();
+
+  const { data, error } = useQuery({
+    queryKey: ["workspace_appointment"],
+    queryFn: async () => {
+      if (!workspace?.workspace_id) {
+        return;
+      }
+      const { data, error } = await supabase
+        .from("workspaces")
+        .select("*, services(*), professionals(*)")
+        .eq("id", workspace.workspace_id)
+        .single();
+
+      if (error) throw new Error(error.message);
+
+      return data;
+    },
+  });
 
   const {
     handleSubmit,
@@ -64,33 +83,66 @@ export function AppointmentForm({}: AppointmentFormProps) {
   });
 
   async function onSubmit(fields: FormType) {
-    const { data, error } = await supabase.from("appointments").insert({});
+    if (!workspace?.user) return;
+
+    const dateStarts = dayjs(new Date(fields.date))
+      .hour(+fields.starts_at_hour)
+      .minute(+fields.starts_at_minute)
+      .toISOString();
+
+    const { data, error } = await supabase
+      .from("appointments")
+      .insert({
+        client_id: client.id,
+        created_by: workspace?.user.id,
+        date: fields.date,
+        professional_id: fields.professional_id,
+        service_type: fields.service_id,
+        starts_at: dateStarts,
+        workspace_id: workspace.workspace_id,
+      })
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
 
     return resetDate();
   }
 
-  const fetchCreateAppointment = async () => {
-    if (!workspace?.workspace_id) {
-      return;
-    }
+  const fetchAppointments = async () => {
+    if (!workspace?.workspace_id) return console.log("no workspace");
+    if (!watch("professional_id"))
+      return console.log("No professional selected yet");
+
     const { data, error } = await supabase
       .from("workspaces")
-      .select("*, services(*), professionals(*), appointments(*)")
-      .eq("id", workspace.workspace_id);
+      .select("appointments!inner(*)")
+      .filter("appointments.date", "gte", dayjs(watch("date")).toISOString())
+      .filter(
+        "appointments.date",
+        "lte",
+        dayjs(watch("date")).add(23, "hour").add(59, "minute").toISOString(),
+      )
+      .filter("appointments.professional_id", "eq", watch("professional_id"))
+      .eq("id", workspace?.workspace_id);
 
-    if (error) throw new Error(error.message);
+    if (!data) return;
 
-    setProfessionals(data[0].professionals);
-    setServices(data[0].services);
-    setAppointments(data[0].appointments);
+    if (data[0].appointments) return setAppointments(data[0].appointments);
 
     return;
   };
 
   useEffect(() => {
-    // fetchAppointmentsByDay();
-    fetchCreateAppointment();
-  }, [watch().service_id, watch().date]);
+    if (!data) return;
+    setProfessionals(data.professionals);
+    setServices(data.services);
+  }, [data]);
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [watch("service_id"), watch("date"), watch("professional_id")]);
 
   return (
     <motion.div

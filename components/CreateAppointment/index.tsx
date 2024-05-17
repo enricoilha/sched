@@ -14,6 +14,7 @@ import { useToast } from "../ui/use-toast";
 import { ClientInfos } from "./ClientInfos";
 import { CpfForm } from "./cpfForm";
 import { AppointmentForm } from "./AppointmentForm";
+import { Button } from "../ui/button";
 
 const revalidate = 30; //revalidate every 30 min
 
@@ -63,17 +64,18 @@ export const CreateAppointment: React.FC = () => {
   return (
     <motion.div className="h-[98vh] w-full items-center overflow-y-auto p-3">
       <header className="flex w-full items-center justify-between">
-        <button
+        <Button
+          variant={"outline"}
           onClick={() =>
             setSidesection((content) => ({ ...content, isOpen: false }))
           }
-          className="rounded-md p-2 text-neutral-600 duration-100 hover:bg-neutral-100"
+          className="rounded-md p-2 text-sm font-medium text-neutral-600 duration-100 hover:bg-neutral-100"
         >
-          <ChevronsRight />
-        </button>
+          Voltar
+        </Button>
       </header>
 
-      <p className="mb-4 mt-1 text-3xl">Criar Agendamento</p>
+      <p className="mb-4 mt-5 text-xl font-medium">Criar Agendamento</p>
 
       {client ? (
         loadingNewAppointment ? (
@@ -84,7 +86,7 @@ export const CreateAppointment: React.FC = () => {
           <>
             <ClientInfos name={client.name} />
 
-            <AppointmentForm />
+            <AppointmentForm client={client} />
           </>
         )
       ) : (

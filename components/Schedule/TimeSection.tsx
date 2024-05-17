@@ -9,19 +9,19 @@ export const TimeSection = () => {
     return date;
   };
   return (
-    <div className="w-10 h-full">
+    <div className="h-full w-10">
       {Array.from({ length: 48 }).map((_, index) => {
         const hours = dayjs()
           .startOf("D")
           .add(index * 30, "minutes");
         return (
-          <div key={index} className="flex h-20 items-start relative">
-            <div className="flex items-start gap-x-2  w-full ">
-              <p className="w-fit text-xs font-light absolute">
+          <div key={index} className="relative flex h-20 items-start">
+            <div className="flex w-full items-start gap-x-2 ">
+              <p className="absolute w-fit text-xs font-light">
                 {index === 0
                   ? "00:00"
                   : `${DateFormatter(hours.hour())}:${DateFormatter(
-                      hours.minute()
+                      hours.minute(),
                     )}`}
               </p>
             </div>
