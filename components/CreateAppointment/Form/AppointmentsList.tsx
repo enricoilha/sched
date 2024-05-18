@@ -1,6 +1,6 @@
-import { Database } from "@/types/supabase";
 import { CalendarSearch } from "lucide-react";
 import { AppointmentListItemType } from "../Types/AppointmentListItemType";
+import dayjs from "dayjs";
 
 interface ListItemProps {
   appointment: AppointmentListItemType;
@@ -8,8 +8,11 @@ interface ListItemProps {
 
 const AppointmentListItem = ({ appointment }: ListItemProps) => {
   return (
-    <div className="item-center flex justify-around">
-      {appointment.services?.duration}
+    <div className="item-center flex h-7 w-full justify-around rounded-md border bg-gray-50">
+      <p className="flex items-center text-sm">
+        {appointment.starts_at &&
+          dayjs(new Date(appointment.starts_at)).format("HH:mm")}
+      </p>
     </div>
   );
 };
@@ -22,7 +25,7 @@ export function AppointmentsList({ appointments }: ComponentProps) {
   console.log(appointments);
   return (
     <div className="w-60">
-      <p className="text-sm font-medium text-gray-600">
+      <p className="mb-3 text-sm font-medium text-gray-600">
         Agendamentos nessa data
       </p>
 
@@ -34,7 +37,7 @@ export function AppointmentsList({ appointments }: ComponentProps) {
           </div>
         </div>
       ) : (
-        <div className=" w-full">
+        <div className="flex w-full flex-col gap-y-1">
           {appointments.map((item, _idx) => (
             <AppointmentListItem
               appointment={item}

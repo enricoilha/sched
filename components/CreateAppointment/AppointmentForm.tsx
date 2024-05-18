@@ -154,35 +154,37 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
         onSubmit={handleSubmit(onSubmit)}
         className="mt-4 flex w-full flex-col justify-center gap-3 "
       >
-        <Controller
-          control={control}
-          name="professional_id"
-          render={({ field, fieldState: { error } }) => (
-            <AppointmentSelect
-              error={error}
-              value={field.value}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              title="Profissional"
-              options={professionals}
-            />
-          )}
-        />
+        <div className="flex items-center justify-around  gap-x-3">
+          <Controller
+            control={control}
+            name="professional_id"
+            render={({ field, fieldState: { error } }) => (
+              <AppointmentSelect
+                error={error}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+                title="Profissional"
+                options={professionals}
+              />
+            )}
+          />
 
-        <Controller
-          control={control}
-          name="service_id"
-          render={({ field, fieldState: { error } }) => (
-            <ServicesSelect
-              error={error}
-              value={field.value}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              title="Serviço"
-              options={services}
-            />
-          )}
-        />
+          <Controller
+            control={control}
+            name="service_id"
+            render={({ field, fieldState: { error } }) => (
+              <ServicesSelect
+                error={error}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+                title="Serviço"
+                options={services}
+              />
+            )}
+          />
+        </div>
 
         <div className="flex flex-col gap-3 ">
           <div className="flex items-start justify-between">
