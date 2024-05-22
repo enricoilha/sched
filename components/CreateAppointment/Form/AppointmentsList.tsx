@@ -18,18 +18,17 @@ const AppointmentListItem = ({ appointment }: ListItemProps) => {
 };
 
 interface ComponentProps {
-  appointments: AppointmentListItemType[] | [];
+  appointments: AppointmentListItemType[] | [] | null;
 }
 
 export function AppointmentsList({ appointments }: ComponentProps) {
-  console.log(appointments);
   return (
     <div className="w-60">
       <p className="mb-3 text-sm font-medium text-gray-600">
         Agendamentos nessa data
       </p>
 
-      {appointments[0] === undefined ? (
+      {appointments && appointments[0] === undefined ? (
         <div className="mt-3 rounded-lg border bg-gray-50 p-3">
           <div className="flex items-center justify-center gap-x-2">
             <CalendarSearch strokeWidth={1.4} />
@@ -38,7 +37,7 @@ export function AppointmentsList({ appointments }: ComponentProps) {
         </div>
       ) : (
         <div className="flex w-full flex-col gap-y-1">
-          {appointments.map((item, _idx) => (
+          {appointments?.map((item, _idx) => (
             <AppointmentListItem
               appointment={item}
               key={`listitemappkey-${_idx}`}

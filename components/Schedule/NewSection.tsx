@@ -3,13 +3,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { CiCalendar } from "react-icons/ci";
-import { HiOutlinePlusSm } from "react-icons/hi";
 import { IoPersonOutline } from "react-icons/io5";
 
 import { SidesectionAtom } from "../../atoms/sidesection";
 import { CreateAppointment } from "../CreateAppointment";
 import { CreateClient } from "../CreateClient";
 import { ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 
 export const NewSection = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -61,32 +69,29 @@ export const NewSection = () => {
   }, []);
 
   return (
-    <>
-      <div
-        ref={buttonRef}
-        onClick={() => setIsOpen(true)}
-        className="bg-albusgreen relative flex cursor-pointer items-center gap-x-1 rounded-md border border-emerald-500 px-7 py-[.3rem] text-sm font-medium text-white duration-150 hover:bg-emerald-500 hover:text-white"
-      >
-        <ChevronDown size={18} />
-        <p>Novo</p>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="green" className="flex items-center gap-x-1 px-5">
+          <ChevronDown size={18} />
+          Novo
+        </Button>
+      </DropdownMenuTrigger>
 
-        {isOpen && (
-          <div
-            ref={dropdownRef}
-            className="min-h-10 absolute left-0 top-10 z-50 flex w-60 flex-col gap-1 rounded-md border bg-white p-2 shadow"
+      <DropdownMenuContent className="w-56">
+        <DropdownMenuLabel>Selecione</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        {buttonsArray.map((item, idx) => (
+          <DropdownMenuItem
+            key={`ButtonDDITEM-${idx}`}
+            className="flex cursor-pointer items-center gap-x-1"
+            onClick={item.openFunction}
           >
-            {buttonsArray.map((item, index) => (
-              <div
-                key={index}
-                onClick={item.openFunction}
-                className="flex h-10 w-full items-center gap-x-2 rounded p-2 font-light text-gray-800 duration-100 hover:bg-gray-100"
-              >
-                <div className="w-8">{item.icon}</div> {item.text}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </>
+            {item.icon}
+            {item.text}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

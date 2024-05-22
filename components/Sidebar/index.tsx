@@ -12,6 +12,7 @@ import { AtSign, Calendar, Hammer, Users } from "lucide-react";
 import { CiLogout } from "react-icons/ci";
 
 import { WorkspaceComponent } from "./Workspace";
+import { Button } from "../ui/button";
 
 export const Sidebar = ({ children }: { children: ReactNode }) => {
   const [workspace] = useAtom(WorkspaceAtom);
@@ -72,16 +73,17 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
             }
 
             return (
-              <div
+              <Button
                 key={index}
                 onClick={() => router.push(item.route)}
-                className={`h-10 w-full rounded-md px-1  ${
-                  path === item.route ? " text-gray-900" : ""
-                } flex cursor-pointer items-center gap-x-3 text-gray-600 duration-150 hover:bg-gray-100 hover:text-neutral-900`}
+                variant={path === item.route ? "green" : "ghost"}
+                className={`h-10 w-full rounded-lg px-1  ${
+                  path === item.route ? "" : ""
+                }`}
               >
                 <div className="flex w-10 justify-center">{item.icon}</div>{" "}
                 <p className="w-full text-sm">{item.text}</p>
-              </div>
+              </Button>
             );
           })}
         </div>

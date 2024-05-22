@@ -14,7 +14,8 @@ module.exports = {
     },
     extend: {
       backgroundColor: {
-        albusgreen: "rgb(62, 207, 142)",
+        albusgreen: "rgb(10, 191, 83)",
+        albusgreendark: "rgb(30, 170, 83)",
       },
       colors: {
         border: "hsl(var(--border))",

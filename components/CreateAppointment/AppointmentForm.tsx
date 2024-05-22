@@ -21,6 +21,7 @@ import { AlarmCheck } from "lucide-react";
 import { Clients } from "@/types/clients";
 import { useQuery } from "@tanstack/react-query";
 import { AppointmentListItemType } from "./Types/AppointmentListItemType";
+import { Button } from "../ui/button";
 
 interface AppointmentFormProps {
   client: Clients;
@@ -44,7 +45,7 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
   const [workspace] = useAtom(WorkspaceAtom);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [appointments, setAppointments] = useState<
-    AppointmentListItemType[] | []
+    AppointmentListItemType[] | [] | null
   >([]);
   const [services, setServices] =
     useState<Database["public"]["Tables"]["services"]["Row"][]>();
@@ -91,6 +92,14 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
       .minute(+fields.starts_at_minute)
       .toISOString();
 
+    if (!services) return console.log("There is no services");
+
+    const serviceDuration = services?.find(
+      (item) => item.id === fields.service_id,
+    )?.duration;
+
+    if (!serviceDuration) return console.log("No service duration");
+
     const { data, error } = await supabase
       .from("appointments")
       .insert({
@@ -100,6 +109,7 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
         professional_id: fields.professional_id,
         service_type: fields.service_id,
         starts_at: dateStarts,
+        ends_at: dayjs(dateStarts).add(serviceDuration, "minute").toISOString(),
         workspace_id: workspace.workspace_id,
       })
       .select();
@@ -128,11 +138,11 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
       .filter("appointments.professional_id", "eq", watch("professional_id"))
       .eq("id", workspace?.workspace_id);
 
-    if (!data) return;
+    if (data === null) return setAppointments(data);
 
-    if (data[0].appointments) return setAppointments(data[0].appointments);
+    if (data[0]?.appointments) return setAppointments(data[0].appointments);
 
-    return;
+    return setAppointments([]);
   };
 
   useEffect(() => {
@@ -154,7 +164,7 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
         onSubmit={handleSubmit(onSubmit)}
         className="mt-4 flex w-full flex-col justify-center gap-3 "
       >
-        <div className="flex items-center justify-around  gap-x-3">
+        <div className="flex items-center justify-around gap-x-3">
           <Controller
             control={control}
             name="professional_id"
@@ -214,10 +224,12 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
                     error={fieldState.error}
                     onBlur={field.onBlur}
                     onChange={field.onChange}
+                    appointments={appointments}
                     //hours
                     options={hours}
                     title="Hora"
                     value={field.value}
+                    selectedDate={watch("date")}
                   />
                 )}
               />
@@ -231,10 +243,13 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
                     error={fieldState.error}
                     onBlur={field.onBlur}
                     onChange={field.onChange}
+                    appointments={appointments}
+                    selectedHour={watch("starts_at_hour")}
                     //hours
                     options={minutes5in5}
                     title="Minuto"
                     value={field.value}
+                    selectedDate={watch("date")}
                   />
                 )}
               />
@@ -266,17 +281,18 @@ export function AppointmentForm({ client }: AppointmentFormProps) {
           </div>
         </div>
 
-        <button
-          className="mx-auto w-full rounded-lg bg-emerald-500 px-5 py-2 text-base font-medium text-white duration-100 hover:bg-emerald-400"
+        <Button
+          variant={"green"}
           type="submit"
           disabled={submitting && submitting}
+          className="h-11 text-base"
         >
           {submitting ? (
             <FiLoader size={24} className="animate-spin" color="#fafafab1" />
           ) : (
             "Criar Agendamento"
           )}
-        </button>
+        </Button>
       </form>
     </motion.div>
   );

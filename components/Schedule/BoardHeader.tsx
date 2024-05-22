@@ -10,7 +10,7 @@ type ItemProps = {
 
 const BoardItem: React.FC<ItemProps> = ({ dayNumber, weekDay }) => {
   return (
-    <div className="flex w-1/5 items-center justify-center gap-x-2 text-start  font-bold text-gray-800">
+    <div className="flex w-1/5 items-center justify-center gap-x-2 text-center font-bold text-gray-800">
       <p className="w-1/2 text-end text-sm font-light">{weekDay}</p>
       <span className="w-1/2 text-start text-2xl">{dayNumber}</span>
     </div>
@@ -66,7 +66,7 @@ export const BoardHeader: React.FC<any> = () => {
   };
 
   return (
-    <div className=" flex  h-10 w-full items-center justify-between  gap-x-3 rounded-tr-lg ">
+    <div className="flex h-10 w-full items-center justify-between gap-x-3 rounded-tr-lg">
       {[...Array(5)].map((_, index) => (
         <BoardItem
           key={index}

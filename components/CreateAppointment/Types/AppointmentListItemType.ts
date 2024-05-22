@@ -12,5 +12,6 @@ export type AppointmentListItemType = {
     service_name: string | null;
   } | null;
   starts_at: string | null;
+  ends_at: string | null;
   workspace_id: string | null;
 };
